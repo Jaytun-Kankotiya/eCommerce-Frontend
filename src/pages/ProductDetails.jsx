@@ -169,7 +169,7 @@ if(!product) return <p className='container py-3'>Product Not Found.</p>
 
                   <div className="d-flex align-items-center mt-4 gap-2 flex-wrap">
                     <h5 className="me-2 mt-1 mb-2">Size: </h5>
-                    {['S', 'M', 'XL', 'XXL'].map((sizeOption) => (
+                    {['S', 'M', 'L', 'XL', 'XXL'].map((sizeOption) => (
                       <div className="mb-3" key={sizeOption}>
                         <label
                           key={sizeOption}

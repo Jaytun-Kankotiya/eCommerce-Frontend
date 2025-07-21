@@ -34,9 +34,19 @@ const ProductProvider = ({ children }) => {
   const [formData, setFormData] = useState({firstName: '', lastName: '', email: '', password: ''})
   const [categoryProducts, setCategoryProducts] = useState([]);
   const [cartData, setCartData] = useState([])
-  const [addressData, setAddressData] = useState([])
-
-
+  const [addressData, setAddressData] = useState({ 
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+  addressLine1: "",
+  addressLine2: "",
+  postalcode: "",
+  city: "",
+  province: "",
+  country: "",
+  saveAddress: false,
+})
 
 
   useEffect(() => {
@@ -143,10 +153,6 @@ const ProductProvider = ({ children }) => {
   }
 
   const addAndRemoveFromCart = async (product) => {
-    // const selectedSize = size[product.id]
-    // if(!selectedSize){
-    //   toast.error("Please select a size!")
-    // }
     const token = localStorage.getItem("token")
     if (!token) {
     toast.error("Please log in to use wishlist.");
@@ -254,12 +260,46 @@ const ProductProvider = ({ children }) => {
   const discount = totalCartValue 
 
 
+  const addressFormHandler = async (address) => {
+    try {
+      const token = localStorage.getItem("token")
+      const isAlreadyExist = formData.includes(address.email)
+      // if(!isAlreadyExist){
+        const response = await fetch("http://localhost:3000/address",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          firstName: address.firstName,
+          lastName: address.lastName || '',
+          email: address.email,
+          phoneNumber: address.phoneNumber,
+          addressLine1: address.addressLine1 || '',
+          addressLine2: address.addressLine2,
+          postalcode: address.postalcode,
+          city: address.city,
+          province: address.province,
+          country: address.country,
+        })
+      })
+        if(response.ok){
+          toast.success("New Address added.")
+        }
+    //   }else {
+    //   toast.warn("This address already exists.");
+    // }
+    } catch (error) {
+      console.log("Error addind new address.", error)
+    }
+  }
+
+
   return (
     <>
       <ProductContext.Provider
         value={{
-          // items,
-          // setItems,
           wishlist,
           setWishlist,
           cartItems,
@@ -292,6 +332,8 @@ const ProductProvider = ({ children }) => {
           delivery,
           deliveryFee,
           totalCartValue,
+          addressData, setAddressData,
+          addressFormHandler
         }}
       >
         {children}

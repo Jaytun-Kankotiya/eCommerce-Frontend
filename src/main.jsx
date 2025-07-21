@@ -10,7 +10,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <App />
-      <ToastContainer position='top-right' toastStyle={{marginTop: '3rem', marginBottom: '0rem'}} autoClose={3000}  />
+      <ToastContainer position='top-right' toastStyle={{marginTop: '3rem', marginBottom: '0rem'}} autoClose={3000} pauseOnHover={false} draggable={true} pauseOnFocusLoss={false} closeOnClick={true} />
     </BrowserRouter>
   </StrictMode>
 );

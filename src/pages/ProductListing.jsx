@@ -72,9 +72,6 @@ const ProductListing = () => {
         const categoryMatch = category.length === 0 || category.includes(item.category)
         const ratingMatch = item.rating >= Number(ratingFilter || 0)
         const searchMatch =  item.name.toLowerCase().includes(search?.toLowerCase() || '')
-        // console.log('item.category:', item.category)
-        // console.log('category state:', category)
-        // console.log('categoryMatch:', categoryMatch, 'for item:', item.name)
         return categoryMatch && ratingMatch && searchMatch
       }
     )

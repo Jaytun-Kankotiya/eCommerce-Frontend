@@ -13,8 +13,8 @@ const Checkout = () => {
     delivery,
     deliveryFee,
     totalCartValue,
-    addressData,
-    setAddressData,
+    addressData, setAddressData,
+    addressFormHandler
   } = useProduct();
 
   const [selectedMethod, setSelectedMethod] = useState("");
@@ -26,7 +26,18 @@ const Checkout = () => {
     "Cryptocurrencies",
   ];
 
-  console.log(cartData);
+//   console.log(cartData);
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    if(addressData.saveAddress){
+        addressFormHandler(addressData)
+    }
+  }
+
+  console.log(addressData)
+
   return (
     <>
       <Header />
@@ -38,7 +49,7 @@ const Checkout = () => {
                 <h2 className="mt-5 py-3 text-center">Checkout</h2>
                 <div className="row">
                   <div className="col-md-6 ms-1 mx-4">
-                    <form className="p-4">
+                    <form className="p-4" onSubmit={handleSubmit}>
                       <p className="fs-3">Enter your Name and address:</p>
 
                       <input
@@ -47,6 +58,8 @@ const Checkout = () => {
                         name="firstName"
                         placeholder="First Name"
                         id=""
+                        value={addressData.firstName}
+                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
                         className="form-control mt-4"
                         style={{ height: "50px" }}
                       />
@@ -56,6 +69,8 @@ const Checkout = () => {
                         type="text"
                         name="lastName"
                         id=""
+                        value={addressData.lastName}
+                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
                         placeholder="Last Name"
                         className="form-control"
                         style={{ height: "50px" }}
@@ -67,6 +82,8 @@ const Checkout = () => {
                         name="email"
                         required
                         id=""
+                        value={addressData.email}
+                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
                         placeholder="Email "
                         className="form-control"
                         style={{ height: "50px" }}
@@ -77,6 +94,8 @@ const Checkout = () => {
                         type="text"
                         name="addressLine1"
                         id=""
+                        value={addressData.addressLine1}
+                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
                         placeholder="Address Line 1"
                         required
                         className="form-control"
@@ -88,6 +107,8 @@ const Checkout = () => {
                         type="text"
                         name="addressLine2"
                         id=""
+                        value={addressData.addressLine2}
+                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
                         placeholder="Address Line 2"
                         className="form-control"
                         style={{ height: "50px" }}
@@ -100,6 +121,8 @@ const Checkout = () => {
                           name="postalcode"
                           required
                           id=""
+                          value={addressData.postalcode}
+                          onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
                           placeholder="Postal Code"
                           className="form-control"
                           style={{ height: "50px" }}
@@ -110,7 +133,9 @@ const Checkout = () => {
                           type="text"
                           name="city"
                           id=""
-                          placeholder="CIty"
+                          value={addressData.city}
+                          onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
+                          placeholder="City"
                           className="form-control"
                           style={{ height: "50px" }}
                         />
@@ -123,6 +148,8 @@ const Checkout = () => {
                           type="text"
                           name="province"
                           id=""
+                          value={addressData.province}
+                          onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
                           placeholder="State/Province"
                           className="form-control"
                           style={{ height: "50px" }}
@@ -133,6 +160,8 @@ const Checkout = () => {
                           type="text"
                           name="country"
                           id=""
+                          value={addressData.country}
+                          onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
                           placeholder="Country"
                           className="form-control"
                           style={{ height: "50px" }}
@@ -143,6 +172,9 @@ const Checkout = () => {
 
                       <input
                         type="number"
+                        name="phoneNumber"
+                        value={addressData.phoneNumber}
+                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
                         className="form-control"
                         placeholder="Phone Number"
                         style={{ height: "50px" }}
@@ -154,6 +186,9 @@ const Checkout = () => {
                           <input
                             className="form-check-input"
                             type="checkbox"
+                            // name="saveAddress" 
+                            checked={addressData.saveAddress}
+                            onChange={(e) => setAddressData({...addressData, saveAddress: e.target.checked})}
                             style={{ height: "20px", width: "20px" }}
                           />
                           <label className="form-check-label" id="saveAddress">
@@ -162,7 +197,7 @@ const Checkout = () => {
                         </div>
                         <br />
 
-                        <div className="d-flex gap-3">
+                        {/* <div className="d-flex gap-3">
                           <input
                             className="form-check-input"
                             type="checkbox"
@@ -175,10 +210,9 @@ const Checkout = () => {
                             {" "}
                             Make this my preferred address
                           </label>
-                        </div>
+                        </div> */}
                       </div>
-                      <br />
-
+                    </form>
                       <hr />
 
                       <div>
@@ -205,7 +239,7 @@ const Checkout = () => {
 
                         <div className="d-flex flex-column gap-3">
                           {paymentMethods.map((method, index) => (
-                            <>
+                            <div key={index}>
                             <label
                               key={index}
                               id={`payment-${index}`}
@@ -229,12 +263,12 @@ const Checkout = () => {
                               />
                               <span className="fw-medium">{method}</span>
                             </label>
-                            </>
+                            </div>
                           ))}
                           {selectedMethod && <p>Selected Payment: {selectedMethod}</p>}
                         </div>
                       </div>
-                    </form>
+                    
                   </div>
 
                   <div
