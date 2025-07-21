@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import { useProduct } from '../contexts/ProductContext';
 import { toast } from 'react-toastify';
 import { useRef } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 const UserProfile = () => {
   const {isLoggedIn, setIsLoggedIn, setWishlist, setCartItems, formMode, setFormMode, formData, setFormData} = useProduct()
@@ -41,8 +42,21 @@ const UserProfile = () => {
   });
 }
 
+const isTokenValid = () => {
+  const token = localStorage.getItem("token")
+  if(!token) return false
+
+  try {
+    const {exp} = jwtDecode(token)
+    return Date.now() < exp * 1000
+  } catch (error) {
+    return false
+  }
+}
+
   useEffect(() => {
-    if(isLoggedIn){
+    const tokenValid = isTokenValid()
+    if(tokenValid){
       const savedUser = localStorage.getItem('user')
     if(savedUser){
       setIsLoggedIn(true)
@@ -54,6 +68,8 @@ const UserProfile = () => {
         password: ''
       })
     }
+    }else {
+      logoutHandler()
     }
   }, [])
 

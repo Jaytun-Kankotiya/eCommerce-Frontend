@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import { useProduct } from "../contexts/ProductContext";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Checkout = () => {
   const {
@@ -35,6 +35,10 @@ const Checkout = () => {
         addressFormHandler(addressData)
     }
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   console.log(addressData)
 
