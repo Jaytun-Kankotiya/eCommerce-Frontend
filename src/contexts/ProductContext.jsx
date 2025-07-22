@@ -262,6 +262,8 @@ const ProductProvider = ({ children }) => {
     }
   };
 
+  const navigate = useNavigate()
+
   const logoutHandler = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
@@ -275,6 +277,7 @@ const ProductProvider = ({ children }) => {
       email: "",
       password: "",
     });
+    navigate('/login')
   };
 
   const totalCartValue = cartData.reduce(
@@ -293,8 +296,9 @@ const ProductProvider = ({ children }) => {
       const token = localStorage.getItem("token");
       // const isAlreadyExist = addressList.some((item) => item.email === address.email)
       // if(!isAlreadyExist){
-      const response = await fetch("http://localhost:3000/address", {
-        method: "POST",
+      const isUpdate = !!address._id
+      const response = await fetch(`http://localhost:3000/address${isUpdate ? `/${address._id}` : ""}`, {
+        method: isUpdate ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -312,15 +316,19 @@ const ProductProvider = ({ children }) => {
           country: address.country,
         }),
       });
+      const result = await response.json()
       if (response.ok) {
-        const data = await response.json();
-        setAddressList((prev) => [...prev, data]);
-        toast.success("New Address added.");
+        // const data = await response.json();
+        // setAddressList((prev) => [...prev, data]);
+        toast.success(isUpdate ? "Address updated successfully" : "New Address added.");
+        return result.data
       } else {
-        toast.error("Failed to add address.");
+        toast.error(result.error || "Failed to save address.");
+        return null
       }
     } catch (error) {
       toast.error("Something went wrong.");
+      return null
     }
   };
 
@@ -349,8 +357,15 @@ const ProductProvider = ({ children }) => {
   const handleSaveAddress = async () => {
     const newAddress = await addressFormHandler(addressData);
     if (newAddress) {
-      setAddressList((prev) => [...prev, newAddress]);
-      toast.success("Address saved successfully");
+      setAddressList((prev) => {
+        const isUpdate = !!addressData._id
+
+        if(isUpdate){
+          return prev.map((item) => item._id === newAddress._id ? newAddress : item )
+        }else {
+          return [...prev, newAddress]
+        }
+      })
       clearFormFields()
     }
   };

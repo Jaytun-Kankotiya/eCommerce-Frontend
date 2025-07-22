@@ -24,7 +24,6 @@ const Address = () => {
     const fetchAddressData = async () => {
       const token = localStorage.getItem("token");
       try {
-        //   const token = localStorage.getItem("token");
         const response = await fetch("http://localhost:3000/address", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -82,6 +81,11 @@ const Address = () => {
     }
   };
 
+  const editAddress = async (adddress) => {
+    setAddressData(adddress)
+    setShowAddressForm(true)
+  }
+
   return (
     <>
       <Header />
@@ -105,7 +109,7 @@ const Address = () => {
               onClick={handleSaveAddress}
               className="btn btn-primary mb-4"
             >
-              Add Address
+              {addressData._id ? "Update Address" : "Add Address"}
             </button>
           </div>
         )}
@@ -114,10 +118,10 @@ const Address = () => {
           {addressList.length > 0 ? (
             <div className="row">
               {addressList.map((item, index) => (
-                <div className="col-md-6 mb-4">
+                <div className="col-md-6 mb-4" key={index}>
                   <div
-                    className="card card shadow-sm border-0 h-100 mb-2"
-                    key={index}
+                    className="card card  h-100 mb-2"
+                    
                   >
                     <div className="card-body">
                       <div className="d-flex align-items-center justify-content-between ">
@@ -147,7 +151,7 @@ const Address = () => {
                         </div>
 
                         <div className="d-flex flex-column gap-3">
-                          <button className="btn btn-outline-primary">
+                          <button onClick={() => editAddress(item)} className="btn btn-outline-primary">
                             Edit
                           </button>
                           <button onClick={() => removeAddress(item)} className="btn btn-danger">Delete</button>
