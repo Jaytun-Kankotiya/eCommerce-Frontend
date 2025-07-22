@@ -45,21 +45,42 @@ const Address = () => {
   }, []);
 
   useEffect(() => {
-  setAddressData({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    addressLine1: "",
-    addressLine2: "",
-    postalcode: "",
-    city: "",
-    province: "",
-    country: "",
-    saveAddress: false,
-  });
-}, []);
+    setAddressData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      addressLine1: "",
+      addressLine2: "",
+      postalcode: "",
+      city: "",
+      province: "",
+      country: "",
+      saveAddress: false,
+    });
+  }, []);
 
+  const removeAddress = async (address) => {
+    const token = localStorage.getItem("token")
+    try {
+      const response = await fetch(
+        `http://localhost:3000/address/${address._id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      if(!response.ok){
+        throw new Error("Failed to delete an adddress")
+      }
+      setAddressList((prev) => prev.filter((item) => item._id !== address._id))
+      toast.success("Address removed successfully.")
+    } catch (error) {
+        toast.error("Error deleting saved address")
+    }
+  };
 
   return (
     <>
@@ -92,34 +113,49 @@ const Address = () => {
         <div>
           {addressList.length > 0 ? (
             <div className="row">
-              { addressList.map((item, index) => (
-              <div className="col-md-6 mb-4">
-                <div className="card card shadow-sm border-0 h-100 mb-2" key={index}>
-                  <div className="card-body">
-                    <div className="d-flex align-items-center justify-content-between ">
-                      <div>
-            <h5 className="card-title mb-3">
-              {item.firstName} {item.lastName}
-            </h5>
-                        <p className="mb-1"><strong>Email:</strong> {item.email}</p>
-                        <p className="mb-1"><strong>Phone Number:</strong> {item.phoneNumber}</p>
-                        <p className="mb-1">
-                          <strong>Address:</strong> {item.addressLine1} {item.addressLine2},{" "}
-                          {item.postalcode}
-                        </p>
-                        <p className="mb-1"><strong>City:</strong> {item.city}</p>
-                        <p className="mb-1"><strong>Province:</strong> {item.province}</p>
-                        <p className="mb-1"><strong>Country:</strong> {item.country}</p>
-                      </div>
+              {addressList.map((item, index) => (
+                <div className="col-md-6 mb-4">
+                  <div
+                    className="card card shadow-sm border-0 h-100 mb-2"
+                    key={index}
+                  >
+                    <div className="card-body">
+                      <div className="d-flex align-items-center justify-content-between ">
+                        <div>
+                          <h5 className="card-title mb-3">
+                            {item.firstName} {item.lastName}
+                          </h5>
+                          <p className="mb-1">
+                            <strong>Email:</strong> {item.email}
+                          </p>
+                          <p className="mb-1">
+                            <strong>Phone Number:</strong> {item.phoneNumber}
+                          </p>
+                          <p className="mb-1">
+                            <strong>Address:</strong> {item.addressLine1}{" "}
+                            {item.addressLine2}, {item.postalcode}
+                          </p>
+                          <p className="mb-1">
+                            <strong>City:</strong> {item.city}
+                          </p>
+                          <p className="mb-1">
+                            <strong>Province:</strong> {item.province}
+                          </p>
+                          <p className="mb-1">
+                            <strong>Country:</strong> {item.country}
+                          </p>
+                        </div>
 
-                      <div className="d-flex flex-column gap-3">
-                        <button className="btn btn-outline-primary">Edit</button>
-                        <button className="btn btn-danger">Delete</button>
+                        <div className="d-flex flex-column gap-3">
+                          <button className="btn btn-outline-primary">
+                            Edit
+                          </button>
+                          <button onClick={() => removeAddress(item)} className="btn btn-danger">Delete</button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
               ))}
             </div>
           ) : (

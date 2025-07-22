@@ -28,7 +28,6 @@ const UserProfile = () => {
   }
 
 
-
 const isTokenValid = () => {
   const token = localStorage.getItem("token")
   if(!token) return false
@@ -55,9 +54,10 @@ const isTokenValid = () => {
         password: ''
       })
     }
-    }else {
-      logoutHandler()
     }
+    // else {
+    //   logoutHandler()
+    // }
   }, [])
 
 
