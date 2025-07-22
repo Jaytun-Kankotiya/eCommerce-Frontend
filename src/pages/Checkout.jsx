@@ -13,8 +13,11 @@ const Checkout = () => {
     delivery,
     deliveryFee,
     totalCartValue,
-    addressData, setAddressData,
-    addressFormHandler
+    addressData,
+    setAddressData,
+    addressFormHandler,
+    addressFormData,
+    handleCheckboxChange
   } = useProduct();
 
   const [selectedMethod, setSelectedMethod] = useState("");
@@ -26,224 +29,65 @@ const Checkout = () => {
     "Cryptocurrencies",
   ];
 
-//   console.log(cartData);
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    if(addressData.saveAddress){
-        addressFormHandler(addressData)
-    }
-  }
-
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+    window.scrollTo(0, 0);
+  }, []);
 
-  console.log(addressData)
+  console.log(addressData);
 
   return (
     <>
       <Header />
       <div className="bg-light">
-        <div className="container py-3 mt-3">
+        <div className="container py-3 mt-3 ">
           <>
             {cartItems.length > 0 ? (
               <>
                 <h2 className="mt-5 py-3 text-center">Checkout</h2>
                 <div className="row">
                   <div className="col-md-6 ms-1 mx-4">
-                    <form className="p-4" onSubmit={handleSubmit}>
-                      <p className="fs-3">Enter your Name and address:</p>
-
+                    {addressFormData()}
+                    <div className="d-flex gap-3 mx-4">
                       <input
-                        type="text"
-                        required
-                        name="firstName"
-                        placeholder="First Name"
-                        id=""
-                        value={addressData.firstName}
-                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
-                        className="form-control mt-4"
-                        style={{ height: "50px" }}
+                        className="form-check-input"
+                        type="checkbox"
+                        // name="saveAddress"
+                        checked={addressData.saveAddress || false}
+                        onChange={handleCheckboxChange}
+                        style={{ height: "20px", width: "20px" }}
                       />
-                      <br />
+                      <label className="form-check-label" id="saveAddress">
+                        Save this address to my profile
+                      </label>
+                    </div>
+                    <br />
+                    <hr />
 
-                      <input
-                        type="text"
-                        name="lastName"
-                        id=""
-                        value={addressData.lastName}
-                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
-                        placeholder="Last Name"
-                        className="form-control"
-                        style={{ height: "50px" }}
-                      />
-                      <br />
+                    <div className="mx-4">
+                      <p className="fs-3">Payment</p>
 
-                      <input
-                        type="text"
-                        name="email"
-                        required
-                        id=""
-                        value={addressData.email}
-                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
-                        placeholder="Email "
-                        className="form-control"
-                        style={{ height: "50px" }}
-                      />
-                      <br />
-
-                      <input
-                        type="text"
-                        name="addressLine1"
-                        id=""
-                        value={addressData.addressLine1}
-                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
-                        placeholder="Address Line 1"
-                        required
-                        className="form-control"
-                        style={{ height: "50px" }}
-                      />
-                      <br />
-
-                      <input
-                        type="text"
-                        name="addressLine2"
-                        id=""
-                        value={addressData.addressLine2}
-                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
-                        placeholder="Address Line 2"
-                        className="form-control"
-                        style={{ height: "50px" }}
-                      />
-                      <br /> 
-
-                      <div className="d-flex align-items-center gap-2">
+                      <label className="fs-5 mt-3">Have a promo code?</label>
+                      <div className="d-flex align-items-center mt-2 gap-3">
                         <input
                           type="text"
-                          name="postalcode"
-                          required
-                          id=""
-                          value={addressData.postalcode}
-                          onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
-                          placeholder="Postal Code"
+                          placeholder="Promo"
                           className="form-control"
-                          style={{ height: "50px" }}
+                          style={{ width: "300px", height: "50px" }}
                         />
-                        <br />
-
-                        <input
-                          type="text"
-                          name="city"
-                          id=""
-                          value={addressData.city}
-                          onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
-                          placeholder="City"
-                          className="form-control"
-                          style={{ height: "50px" }}
-                        />
-                        <br />
+                        <button className="btn btn-success rounded-pill">
+                          Apply
+                        </button>
                       </div>
                       <br />
-
-                      <div className="d-flex align-items-center gap-2">
-                        <input
-                          type="text"
-                          name="province"
-                          id=""
-                          value={addressData.province}
-                          onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
-                          placeholder="State/Province"
-                          className="form-control"
-                          style={{ height: "50px" }}
-                        />
-                        <br />
-
-                        <input
-                          type="text"
-                          name="country"
-                          id=""
-                          value={addressData.country}
-                          onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
-                          placeholder="Country"
-                          className="form-control"
-                          style={{ height: "50px" }}
-                        />
-                        <br />
-                      </div>
                       <br />
+                    </div>
 
-                      <input
-                        type="number"
-                        name="phoneNumber"
-                        value={addressData.phoneNumber}
-                        onChange={(e) => setAddressData({...addressData, [e.target.name]: e.target.value})}
-                        className="form-control"
-                        placeholder="Phone Number"
-                        style={{ height: "50px" }}
-                      />
-                      <br />
+                    <div className="mx-4 mb-4">
+                      <p className="fs-5 mb-3">How would you like to pay?</p>
 
-                      <div className="">
-                        <div className="d-flex gap-3">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            // name="saveAddress" 
-                            checked={addressData.saveAddress}
-                            onChange={(e) => setAddressData({...addressData, saveAddress: e.target.checked})}
-                            style={{ height: "20px", width: "20px" }}
-                          />
-                          <label className="form-check-label" id="saveAddress">
-                            Save this address to my profile
-                          </label>
-                        </div>
-                        <br />
-
-                        {/* <div className="d-flex gap-3">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            style={{ height: "20px", width: "20px" }}
-                          />
-                          <label
-                            className="form-check-label"
-                            id="preferredAddress"
-                          >
-                            {" "}
-                            Make this my preferred address
-                          </label>
-                        </div> */}
-                      </div>
-                    </form>
-                      <hr />
-
-                      <div>
-                        <p className="fs-3">Payment</p>
-
-                        <label className="fs-5 mt-3">Have a promo code?</label>
-                        <div className="d-flex align-items-center mt-2 gap-3">
-                          <input
-                            type="text"
-                            placeholder="Promo"
-                            className="form-control"
-                            style={{ width: "300px", height: "50px" }}
-                          />
-                          <button className="btn btn-success rounded-pill">
-                            Apply
-                          </button>
-                        </div>
-                        <br />
-                        <br />
-                      </div>
-
-                      <div>
-                        <p className="fs-5 mb-3">How would you like to pay?</p>
-
-                        <div className="d-flex flex-column gap-3">
-                          {paymentMethods.map((method, index) => (
-                            <div key={index}>
+                      <div className="d-flex flex-column gap-3">
+                        {paymentMethods.map((method, index) => (
+                          <div key={index}>
                             <label
                               key={index}
                               id={`payment-${index}`}
@@ -253,7 +97,12 @@ const Checkout = () => {
                                   ? "border border-1 border-primary bg-light shadow-sm"
                                   : "border-secondary"
                               }`}
-                              style={{ cursor: 'pointer', width: "100%", maxWidth: "320px", transition: "all 0.3s ease" }}
+                              style={{
+                                cursor: "pointer",
+                                width: "100%",
+                                maxWidth: "320px",
+                                transition: "all 0.3s ease",
+                              }}
                             >
                               <input
                                 type="radio"
@@ -263,16 +112,17 @@ const Checkout = () => {
                                 checked={selectedMethod === method}
                                 onChange={() => setSelectedMethod(method)}
                                 className="d-none form-check-input"
-                                style={{ pointerEvents: 'none' }}
+                                style={{ pointerEvents: "none" }}
                               />
                               <span className="fw-medium">{method}</span>
                             </label>
-                            </div>
-                          ))}
-                          {selectedMethod && <p>Selected Payment: {selectedMethod}</p>}
-                        </div>
+                          </div>
+                        ))}
+                        {selectedMethod && (
+                          <p>Selected Payment: {selectedMethod}</p>
+                        )}
                       </div>
-                    
+                    </div>
                   </div>
 
                   <div
@@ -310,7 +160,8 @@ const Checkout = () => {
                         <h5>TOTAL AMOUNT</h5>
                         <h5>
                           ₹
-                          {totalCartValue + (totalCartValue * 0.13) +
+                          {totalCartValue +
+                            totalCartValue * 0.13 +
                             (delivery === "Free Delivery" ? 0 : deliveryFee)}
                         </h5>
                       </div>

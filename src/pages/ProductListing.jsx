@@ -35,12 +35,12 @@ const ProductListing = () => {
   const productCategory = async () => {
     try {
       const response = await fetch(`http://localhost:3000/productListing`)
-      console.log(response)
+      // console.log(response)
       if(response.ok){
         const data = await response.json()
         setCategoryProducts(data)
         setLoading(false)
-        console.log(data)
+        // console.log(data)
       }
     } catch (error) {
       console.log("Error fetching products.")

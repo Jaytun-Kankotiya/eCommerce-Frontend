@@ -6,7 +6,7 @@ import { useRef } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 const UserProfile = () => {
-  const {isLoggedIn, setIsLoggedIn, setWishlist, setCartItems, formMode, setFormMode, formData, setFormData} = useProduct()
+  const {isLoggedIn, setIsLoggedIn, logoutHandler, setWishlist, setCartItems, formMode, setFormMode, formData, setFormData} = useProduct()
   const [showPassword, setShowPassword] = useState(false)
   const passwordRef = useRef()
 
@@ -27,20 +27,7 @@ const UserProfile = () => {
     setShowPassword((prev) => !prev)
   }
 
-  const logoutHandler = () => {
-    localStorage.removeItem('user')
-    localStorage.removeItem('token')
-    setIsLoggedIn(false)
-    toast.success('Logged out successfully!')
-    setWishlist([]);
-    setCartItems([]);
-    setFormData({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: ''
-  });
-}
+
 
 const isTokenValid = () => {
   const token = localStorage.getItem("token")
