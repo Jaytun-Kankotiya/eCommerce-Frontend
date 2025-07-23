@@ -3,6 +3,7 @@ import { useProduct } from "../contexts/ProductContext";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Checkout = () => {
   const {
@@ -34,9 +35,14 @@ const Checkout = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const navigate = useNavigate()
+
   const placeOrderHandler = () => {
-    if(addressData && selectedMethod ){
-        
+    if(addressData.saveAddress && selectedMethod ){
+        navigate('/orders')
+        toast.success("Order placed. Thank you for shopping.")
+    }else{
+        toast.error("Please select delivery address and payment method to proceed.")
     }
   }
 
@@ -174,13 +180,13 @@ const Checkout = () => {
                       <p className="text-center">
                         You will save ₹{discount} on this order
                       </p>
-                      <Link
-                        to={"/orders"}
+                      <button
+                        onClick={placeOrderHandler}
                         type="button"
                         className="btn btn-primary w-100"
                       >
                         Place Order
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 </div>

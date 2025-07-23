@@ -262,7 +262,7 @@ const ProductProvider = ({ children }) => {
     }
   };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const logoutHandler = () => {
     localStorage.removeItem("user");
@@ -277,7 +277,7 @@ const ProductProvider = ({ children }) => {
       email: "",
       password: "",
     });
-    navigate('/login')
+    navigate("/login");
   };
 
   const totalCartValue = cartData.reduce(
@@ -289,55 +289,54 @@ const ProductProvider = ({ children }) => {
   const discount = totalCartValue;
 
   const location = useLocation();
-  const isAddressPage = location.pathname === "/address";
 
   const addressFormHandler = async (address) => {
     try {
       const token = localStorage.getItem("token");
       // const isAlreadyExist = addressList.some((item) => item.email === address.email)
       // if(!isAlreadyExist){
-      const isUpdate = !!address._id
-      const response = await fetch(`http://localhost:3000/address${isUpdate ? `/${address._id}` : ""}`, {
-        method: isUpdate ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          firstName: address.firstName,
-          lastName: address.lastName || "",
-          email: address.email,
-          phoneNumber: address.phoneNumber,
-          addressLine1: address.addressLine1 || "",
-          addressLine2: address.addressLine2,
-          postalcode: address.postalcode,
-          city: address.city,
-          province: address.province,
-          country: address.country,
-        }),
-      });
-      const result = await response.json()
+      const isUpdate = !!address._id;
+      const response = await fetch(
+        `http://localhost:3000/address${isUpdate ? `/${address._id}` : ""}`,
+        {
+          method: isUpdate ? "PUT" : "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            firstName: address.firstName,
+            lastName: address.lastName || "",
+            email: address.email,
+            phoneNumber: address.phoneNumber,
+            addressLine1: address.addressLine1 || "",
+            addressLine2: address.addressLine2,
+            postalcode: address.postalcode,
+            city: address.city,
+            province: address.province,
+            country: address.country,
+          }),
+        }
+      );
+      const result = await response.json();
       if (response.ok) {
         // const data = await response.json();
         // setAddressList((prev) => [...prev, data]);
-        toast.success(isUpdate ? "Address updated successfully" : "New Address added.");
-        return result.data
+        toast.success(
+          isUpdate ? "Address updated successfully" : "New Address added."
+        );
+        return result.data;
       } else {
         toast.error(result.error || "Failed to save address.");
-        return null
+        return null;
       }
     } catch (error) {
       toast.error("Something went wrong.");
-      return null
+      return null;
     }
   };
 
   const handleCheckboxChange = async (e) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("You are not logged in.");
-      return;
-    }
     const isChecked = e.target.checked;
 
     setAddressData((prev) => ({
@@ -345,31 +344,57 @@ const ProductProvider = ({ children }) => {
       saveAddress: isChecked,
     }));
 
-    if (isChecked) {
-      const newAdd = await addressFormHandler(addressData);
-      if(newAdd){
-        setAddressList((prev) => [...prev, newAdd])
-      }
-      
+    if(!isChecked) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("You are not logged in.");
+      return;
     }
+
+    const requireFields = [
+      "firstName",
+      "email",
+      "phoneNumber",
+      "addressLine1",
+      "postalcode",
+      "city",
+      "province",
+      "country",
+    ];
+
+    const missingFields = requireFields.filter((field) => !addressData[field] || addressData[field].trim() === "")
+
+
+      if(missingFields.length > 0){
+        toast.error("Please fill in all required fields before saving the address.")
+        return
+      }
+
+      const newAdd = await addressFormHandler(addressData);
+      if (newAdd) {
+        setAddressList((prev) => [...prev, newAdd]);
+      }
+    
   };
 
   const handleSaveAddress = async () => {
     const newAddress = await addressFormHandler(addressData);
     if (newAddress) {
       setAddressList((prev) => {
-        const isUpdate = !!addressData._id
+        const isUpdate = !!addressData._id;
 
-        if(isUpdate){
-          return prev.map((item) => item._id === newAddress._id ? newAddress : item )
-        }else {
-          return [...prev, newAddress]
+        if (isUpdate) {
+          return prev.map((item) =>
+            item._id === newAddress._id ? newAddress : item
+          );
+        } else {
+          return [...prev, newAddress];
         }
-      })
-      clearFormFields()
+      });
+      clearFormFields();
     }
   };
-
 
   const addressFormData = () => {
     return (
