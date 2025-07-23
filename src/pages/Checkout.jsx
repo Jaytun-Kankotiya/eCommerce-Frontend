@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import { useProduct } from "../contexts/ProductContext";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   const {
@@ -33,7 +34,11 @@ const Checkout = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  console.log(addressData);
+  const placeOrderHandler = () => {
+    if(addressData && selectedMethod ){
+        
+    }
+  }
 
   return (
     <>

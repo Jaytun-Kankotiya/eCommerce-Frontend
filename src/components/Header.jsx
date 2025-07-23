@@ -21,7 +21,7 @@ const Header = () => {
       <nav className="navbar navbar-expand-lg py-2 fixed-top bg-white ">
         <div className="container d-flex justify-content-between align-items-center">
           <NavLink className="navbar-brand text-secondary mt-1 me-5" to="/">
-            MyShoppingSite
+            myShoppingSite
           </NavLink>
           <form className="d-lg-block flex-grow-1 mt-1 mx-5 w-50">
             <input
@@ -53,11 +53,14 @@ const Header = () => {
                   <div className="dropdown profile-dropdown">
                     <img
                       style={{
-                        width: "35px",
-                        height: "35px",
+                        width: "36px",
+                        height: "36px",
                         cursor: "pointer",
-                        border: "2px solid #dee2e6",
+                        border: "1px solid #ccc",
                         padding: "2px",
+                        objectFit: "cover",
+                        transition: "0.3s",
+                        backgroundColor: "#fff",
                       }}
                       src="https://cdn-icons-png.flaticon.com/128/2202/2202112.png"
                       id="profileDropdown"
@@ -68,22 +71,27 @@ const Header = () => {
                       aria-expanded="false"
                     />
                     <ul
-                      className="dropdown-menu dropdown-menu-start shadow-sm"
-                      aria-labelledby="profilprofileDropdowneDrop"
+                      className="dropdown-menu dropdown-menu-end shadow-sm"
+                      aria-labelledby="profileDropdown"
+                      style={{
+                        minWidth: "180px",
+                        borderRadius: "10px",
+                        fontSize: "0.95rem",
+                      }}
                     >
                       <li>
                         <Link className="dropdown-item" to={"/login"}>
-                          👤 My Profile
+                          👤 &nbsp; My Profile
                         </Link>
                       </li>
                       <li>
                         <Link className="dropdown-item" to={"/orders"}>
-                          📦 My Orders
+                          📦 &nbsp; My Orders
                         </Link>
                       </li>
                       <li>
                         <Link className="dropdown-item" to={"/address"}>
-                          🏠 My Address
+                          🏠 &nbsp; My Address
                         </Link>
                       </li>
                       <li>
@@ -94,7 +102,7 @@ const Header = () => {
                           onClick={logoutHandler}
                           className="dropdown-item text-danger"
                         >
-                          🚪 Logout
+                          🚪 &nbsp; Logout
                         </button>
                       </li>
                     </ul>
