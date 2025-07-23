@@ -19,10 +19,12 @@ const Checkout = () => {
     setAddressData,
     addressFormHandler,
     addressFormData,
-    handleCheckboxChange
+    handleCheckboxChange,
+    placeOrderHandler,
+    selectedMethod, setSelectedMethod
   } = useProduct();
 
-  const [selectedMethod, setSelectedMethod] = useState("");
+
 
   const paymentMethods = [
     "Credit or Debit Card",
@@ -35,16 +37,7 @@ const Checkout = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const navigate = useNavigate()
-
-  const placeOrderHandler = () => {
-    if(addressData.saveAddress && selectedMethod ){
-        navigate('/orders')
-        toast.success("Order placed. Thank you for shopping.")
-    }else{
-        toast.error("Please select delivery address and payment method to proceed.")
-    }
-  }
+//   const navigate = useNavigate()
 
   return (
     <>

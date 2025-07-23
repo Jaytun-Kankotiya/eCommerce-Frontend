@@ -24,6 +24,7 @@ const ProductProvider = ({ children }) => {
   const [formMode, setFormMode] = useState("login");
   const [userToken, setUserToken] = useState(null);
   const [addressList, setAddressList] = useState([]);
+  const [selectedMethod, setSelectedMethod] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -336,6 +337,17 @@ const ProductProvider = ({ children }) => {
     }
   };
 
+      const requireFields = [
+      "firstName",
+      "email",
+      "phoneNumber",
+      "addressLine1",
+      "postalcode",
+      "city",
+      "province",
+      "country",
+    ];
+
   const handleCheckboxChange = async (e) => {
     const isChecked = e.target.checked;
 
@@ -352,18 +364,7 @@ const ProductProvider = ({ children }) => {
       return;
     }
 
-    const requireFields = [
-      "firstName",
-      "email",
-      "phoneNumber",
-      "addressLine1",
-      "postalcode",
-      "city",
-      "province",
-      "country",
-    ];
-
-    const missingFields = requireFields.filter((field) => !addressData[field] || addressData[field].trim() === "")
+    const missingFields = requireFields.filter((field) => !addressData[field])
 
 
       if(missingFields.length > 0){
@@ -375,23 +376,33 @@ const ProductProvider = ({ children }) => {
       if (newAdd) {
         setAddressList((prev) => [...prev, newAdd]);
       }
-    
-  };
+  }
+
+
+  const placeOrderHandler = () => {
+    const isAddressValid = requireFields.every((field) => addressData[field]?.trim())
+  //     console.log("addressData:", addressData);
+  // console.log("isAddressValid:", isAddressValid);
+  // console.log("selectedMethod:", selectedMethod);
+    if(isAddressValid  && selectedMethod ){
+        navigate('/orders')
+        toast.success("Order placed. Thank you for shopping.")
+    }else{
+        toast.error(isAddressValid ? "Please select payment method to proceed." : "Please add Delivery address to proceed.")
+    }
+  }
 
   const handleSaveAddress = async () => {
     const newAddress = await addressFormHandler(addressData);
     if (newAddress) {
       setAddressList((prev) => {
         const isUpdate = !!addressData._id;
+        console.log(isUpdate)
 
-        if (isUpdate) {
-          return prev.map((item) =>
-            item._id === newAddress._id ? newAddress : item
-          );
-        } else {
-          return [...prev, newAddress];
-        }
-      });
+        return isUpdate ? prev.map((item) =>
+            (item._id === newAddress._id ? newAddress : item)
+          ) : [...prev, newAddress]
+      })
       clearFormFields();
     }
   };
@@ -637,6 +648,8 @@ const ProductProvider = ({ children }) => {
           setAddressList,
           addressFormData,
           handleSaveAddress,
+          placeOrderHandler,
+          selectedMethod, setSelectedMethod
         }}
       >
         {children}
