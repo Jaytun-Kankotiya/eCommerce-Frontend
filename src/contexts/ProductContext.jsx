@@ -25,6 +25,7 @@ const ProductProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   const [addressList, setAddressList] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState("");
+  const [orderedList, setOrderedList] = useState([])
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -381,14 +382,13 @@ const ProductProvider = ({ children }) => {
 
   const placeOrderHandler = () => {
     const isAddressValid = requireFields.every((field) => addressData[field]?.trim())
-  //     console.log("addressData:", addressData);
-  // console.log("isAddressValid:", isAddressValid);
-  // console.log("selectedMethod:", selectedMethod);
     if(isAddressValid  && selectedMethod ){
         navigate('/orders')
         toast.success("Order placed. Thank you for shopping.")
+        setOrderedList(cartItems)
+        console.log(cartItems)
     }else{
-        toast.error(isAddressValid ? "Please select payment method to proceed." : "Please add Delivery address to proceed.")
+        toast.error(isAddressValid ? "Please select a payment method to proceed." : "Please add Delivery address to proceed.")
     }
   }
 
@@ -649,7 +649,8 @@ const ProductProvider = ({ children }) => {
           addressFormData,
           handleSaveAddress,
           placeOrderHandler,
-          selectedMethod, setSelectedMethod
+          selectedMethod, setSelectedMethod,
+          orderedList, setOrderedList
         }}
       >
         {children}

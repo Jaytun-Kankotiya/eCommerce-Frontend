@@ -71,7 +71,6 @@ const isTokenValid = () => {
     try {
       const endpoint = formMode === 'login' ? 'verify' : ''
       const url = `http://localhost:3000/userProfile/${endpoint}`
-      console.log(url)
       
       const response = await fetch(url, {
         method: "POST",
@@ -92,7 +91,7 @@ const isTokenValid = () => {
         localStorage.setItem('user', JSON.stringify(result.user));  
       if(result.token){
         localStorage.setItem('token', result.token);     
-        console.log("Token stored:", result.token);           
+        // console.log("Token stored:", result.token);           
       }
       toast.success(result.message);
       setIsLoggedIn(true);
@@ -114,7 +113,7 @@ const isTokenValid = () => {
       resetFrom()
     }
   }
-  console.log(formData)
+  // console.log(formData)
 
   return (
     <>
