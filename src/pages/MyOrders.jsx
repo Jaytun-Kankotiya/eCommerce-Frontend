@@ -5,6 +5,8 @@ import { useProduct } from "../contexts/ProductContext";
 const MyOrders = () => {
   const { orderedList, setOrderedList } = useProduct();
 
+  console.log(orderedList)
+
   return (
     <>
       <Header />

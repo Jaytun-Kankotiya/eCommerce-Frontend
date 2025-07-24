@@ -136,9 +136,7 @@ const isTokenValid = () => {
         ) : 
        
         (
-        // <div className=''>
         <div className='card p-4 shadow-sm mt-3 w-100' style={{
-            // width: '100%',
             maxWidth: '500px',
             borderRadius: '1.25rem',
             background: '#ffffff',

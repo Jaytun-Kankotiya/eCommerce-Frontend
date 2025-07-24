@@ -386,7 +386,8 @@ const ProductProvider = ({ children }) => {
         navigate('/orders')
         toast.success("Order placed. Thank you for shopping.")
         setOrderedList(cartItems)
-        console.log(cartItems)
+        clearFormFields()
+        setSelectedMethod("")
     }else{
         toast.error(isAddressValid ? "Please select a payment method to proceed." : "Please add Delivery address to proceed.")
     }
