@@ -290,6 +290,8 @@ const ProductProvider = ({ children }) => {
   const delivery = totalCartValue > 2999 ? "Free Delivery" : `₹${deliveryFee}`;
   const discount = totalCartValue;
 
+  console.log(totalCartValue)
+
   const location = useLocation();
 
   const addressFormHandler = async (address) => {
@@ -594,7 +596,7 @@ const ProductProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     console.log("Token in localStorage:", token);
     if (!token) {
-      toast.error("Please log in to use wishlist.");
+      toast.error("Please Login to place your order.");
       return;
     }
     try {
@@ -605,17 +607,21 @@ const ProductProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          cartItems,
-          addressData,
+          cartData,
+          ...addressData,
           selectedMethod,
+          totalOrderValue,
         }),
       });
+      console.log("Cart Items: ", cartData)
+      console.log("Address Data: ", addressData)
+      console.log("Payment Method: ", selectedMethod)
       const result = await response.json();
       if (response.ok) {
-        toast.success("Order Placed Successfully.");
+        toast.success("Order Placed Successfully. Thank you for shopping.");
         return result.data;
       } else {
-        toast.error(result.message || "Failed to place order.");
+        toast.error(result.error || "Failed to place an order.")
       }
     } catch (error) {
       toast.error("Something went wrong, please try again.");
@@ -628,9 +634,10 @@ const ProductProvider = ({ children }) => {
     );
     if (isAddressValid && selectedMethod) {
       const orderResult = await orderPlaceHandler();
+      console.log("OrderResult: ",orderResult)
       if (orderResult) {
         navigate("/orders");
-        toast.success("Order placed. Thank you for shopping.");
+        // toast.success("Order placed");
         clearFormFields();
         setSelectedMethod("");
       }
@@ -642,6 +649,11 @@ const ProductProvider = ({ children }) => {
       );
     }
   };
+
+    const totalOrderValue =
+    totalCartValue +
+    totalCartValue * 0.13 +
+    (delivery === "Free Delivery" ? 0 : deliveryFee);
 
   return (
     <>
@@ -699,8 +711,8 @@ const ProductProvider = ({ children }) => {
           setSelectedMethod,
           orderedList,
           setOrderedList,
-          totalCartValue,
           orderPlaceHandler,
+          totalOrderValue
         }}
       >
         {children}

@@ -54,6 +54,8 @@ const Cart = () => {
     fetchCart();
   }, [setCartItems]);
 
+  console.log(cartData)
+
 
   const removeFromCart = async (productId) => {
     const token = localStorage.getItem("token");
@@ -77,7 +79,6 @@ const Cart = () => {
       console.log("Error removing Item from cart.", error);
     }
   };
-
   const displayItems = cartData.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -92,6 +93,7 @@ const Cart = () => {
 
     if(allSizeSelected){
       navigate('/checkout')
+      // setCartData((prev) => [...prev, size: size[id]])
     }else{
       toast.error("Please select a size before proceeding!")
     }

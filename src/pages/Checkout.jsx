@@ -21,11 +21,11 @@ const Checkout = () => {
     addressFormData,
     handleCheckboxChange,
     placeOrderHandler,
-    selectedMethod, setSelectedMethod,
-    orderPlaceHandler
+    selectedMethod,
+    setSelectedMethod,
+    orderPlaceHandler,
+    totalOrderValue
   } = useProduct();
-
-
 
   const paymentMethods = [
     "Credit or Debit Card",
@@ -38,10 +38,9 @@ const Checkout = () => {
     window.scrollTo(0, 0);
   }, []);
 
-//   const navigate = useNavigate()
+  //   const navigate = useNavigate()
 
-
-
+  // console.log(totalOrderValue)
 
   return (
     <>
@@ -166,12 +165,7 @@ const Checkout = () => {
                       <hr />
                       <div className="d-flex justify-content-between">
                         <h5>TOTAL AMOUNT</h5>
-                        <h5>
-                          ₹
-                          {totalCartValue +
-                            totalCartValue * 0.13 +
-                            (delivery === "Free Delivery" ? 0 : deliveryFee)}
-                        </h5>
+                        <h5>₹{totalOrderValue}</h5>
                       </div>
                       <hr />
                       <p className="text-center">
