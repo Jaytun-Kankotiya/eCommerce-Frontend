@@ -54,6 +54,7 @@ const Cart = () => {
     fetchCart();
   }, [setCartItems]);
 
+
   const removeFromCart = async (productId) => {
     const token = localStorage.getItem("token");
     try {
@@ -83,6 +84,9 @@ const Cart = () => {
 
 
 
+
+
+
   const checkoutHandler = () => {
     const allSizeSelected = cartItems.every((id) => size[id]);
 
@@ -92,6 +96,7 @@ const Cart = () => {
       toast.error("Please select a size before proceeding!")
     }
   }
+
 
   if (loading)
     return <h5 className="mt-5 container py-5 text-center">Loading cart...</h5>;

@@ -25,7 +25,7 @@ const ProductProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   const [addressList, setAddressList] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState("");
-  const [orderedList, setOrderedList] = useState([])
+  const [orderedList, setOrderedList] = useState([]);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -338,16 +338,16 @@ const ProductProvider = ({ children }) => {
     }
   };
 
-      const requireFields = [
-      "firstName",
-      "email",
-      "phoneNumber",
-      "addressLine1",
-      "postalcode",
-      "city",
-      "province",
-      "country",
-    ];
+  const requireFields = [
+    "firstName",
+    "email",
+    "phoneNumber",
+    "addressLine1",
+    "postalcode",
+    "city",
+    "province",
+    "country",
+  ];
 
   const handleCheckboxChange = async (e) => {
     const isChecked = e.target.checked;
@@ -357,7 +357,7 @@ const ProductProvider = ({ children }) => {
       saveAddress: isChecked,
     }));
 
-    if(!isChecked) return;
+    if (!isChecked) return;
 
     const token = localStorage.getItem("token");
     if (!token) {
@@ -365,45 +365,36 @@ const ProductProvider = ({ children }) => {
       return;
     }
 
-    const missingFields = requireFields.filter((field) => !addressData[field])
+    const missingFields = requireFields.filter((field) => !addressData[field]);
 
-
-      if(missingFields.length > 0){
-        toast.error("Please fill in all required fields before saving the address.")
-        return
-      }
-
-      const newAdd = await addressFormHandler(addressData);
-      if (newAdd) {
-        setAddressList((prev) => [...prev, newAdd]);
-      }
-  }
-
-
-  const placeOrderHandler = () => {
-    const isAddressValid = requireFields.every((field) => addressData[field]?.trim())
-    if(isAddressValid  && selectedMethod ){
-        navigate('/orders')
-        toast.success("Order placed. Thank you for shopping.")
-        setOrderedList(cartItems)
-        clearFormFields()
-        setSelectedMethod("")
-    }else{
-        toast.error(isAddressValid ? "Please select a payment method to proceed." : "Please add Delivery address to proceed.")
+    if (missingFields.length > 0) {
+      toast.error(
+        "Please fill in all required fields before saving the address."
+      );
+      return;
     }
-  }
+
+    const newAdd = await addressFormHandler(addressData);
+    if (newAdd) {
+      setAddressList((prev) => [...prev, newAdd]);
+    }
+  };
+
+
 
   const handleSaveAddress = async () => {
     const newAddress = await addressFormHandler(addressData);
     if (newAddress) {
       setAddressList((prev) => {
         const isUpdate = !!addressData._id;
-        console.log(isUpdate)
+        console.log(isUpdate);
 
-        return isUpdate ? prev.map((item) =>
-            (item._id === newAddress._id ? newAddress : item)
-          ) : [...prev, newAddress]
-      })
+        return isUpdate
+          ? prev.map((item) =>
+              item._id === newAddress._id ? newAddress : item
+            )
+          : [...prev, newAddress];
+      });
       clearFormFields();
     }
   };
@@ -598,6 +589,60 @@ const ProductProvider = ({ children }) => {
     );
   };
 
+  const orderPlaceHandler = async () => {
+    
+    const token = localStorage.getItem("token");
+    console.log("Token in localStorage:", token);
+    if (!token) {
+      toast.error("Please log in to use wishlist.");
+      return;
+    }
+    try {
+      const response = await fetch("http://localhost:3000/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          cartItems,
+          addressData,
+          selectedMethod,
+        }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        toast.success("Order Placed Successfully.");
+        return result.data;
+      } else {
+        toast.error(result.message || "Failed to place order.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong, please try again.");
+    }
+  };
+
+    const placeOrderHandler = async () => {
+    const isAddressValid = requireFields.every((field) =>
+      addressData[field]?.trim()
+    );
+    if (isAddressValid && selectedMethod) {
+      const orderResult = await orderPlaceHandler();
+      if (orderResult) {
+        navigate("/orders");
+        toast.success("Order placed. Thank you for shopping.");
+        clearFormFields();
+        setSelectedMethod("");
+      }
+    } else {
+      toast.error(
+        isAddressValid
+          ? "Please select a payment method to proceed."
+          : "Please add Delivery address to proceed."
+      );
+    }
+  };
+
   return (
     <>
       <ProductContext.Provider
@@ -650,8 +695,12 @@ const ProductProvider = ({ children }) => {
           addressFormData,
           handleSaveAddress,
           placeOrderHandler,
-          selectedMethod, setSelectedMethod,
-          orderedList, setOrderedList
+          selectedMethod,
+          setSelectedMethod,
+          orderedList,
+          setOrderedList,
+          totalCartValue,
+          orderPlaceHandler,
         }}
       >
         {children}

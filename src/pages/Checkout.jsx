@@ -7,8 +7,8 @@ import { toast } from "react-toastify";
 
 const Checkout = () => {
   const {
-    cartData,
-    setCartData,
+    // cartData,
+    // setCartData,
     cartItems,
     quantity,
     discount,
@@ -21,7 +21,8 @@ const Checkout = () => {
     addressFormData,
     handleCheckboxChange,
     placeOrderHandler,
-    selectedMethod, setSelectedMethod
+    selectedMethod, setSelectedMethod,
+    orderPlaceHandler
   } = useProduct();
 
 
@@ -38,6 +39,9 @@ const Checkout = () => {
   }, []);
 
 //   const navigate = useNavigate()
+
+
+
 
   return (
     <>
