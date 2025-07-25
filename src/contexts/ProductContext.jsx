@@ -640,6 +640,7 @@ const ProductProvider = ({ children }) => {
         // toast.success("Order placed");
         clearFormFields();
         setSelectedMethod("");
+        setCartData([])
       }
     } else {
       toast.error(

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useProduct } from "../contexts/ProductContext";
+import { Link } from "react-router-dom";
 
 const MyOrders = () => {
   const {
@@ -47,7 +48,7 @@ const MyOrders = () => {
     <>
       <Header />
       <main className="mt-5 py-4">
-        <p className="fs-3 text-center">My Orders</p>
+        <p className="fs-3 text-center py-2">My Orders</p>
         <div className="container">
           {orderedList.length ? (
             orderedList.map((order) => (
@@ -83,6 +84,7 @@ const MyOrders = () => {
                     <div className="col-lg-6">
                       {order.cartData.map((item, index) => (
                         <div className="d-flex mb-4" key={index}>
+                          <Link to={`/productDetails/${item.id}`}>
                           <img
                             src={item.imageLink}
                             alt={item.name}
@@ -94,6 +96,7 @@ const MyOrders = () => {
                               marginRight: "25px",
                             }}
                           />
+                          </Link>
                           <div className="mt-1">
                             <h6>{item.name}</h6>
                             <p className="mb-1 text-muted">
@@ -107,12 +110,7 @@ const MyOrders = () => {
                                 Size: {item.size}
                               </p>
                             )} */}
-
-
-                            <button className="btn btn-primary mt-2">Buy it again</button>
-
-
-
+                            <Link to={`/productDetails/${item.id}`} className="btn btn-primary mt-2">Buy it again</Link>
                           </div>
                         </div>
                       ))}
