@@ -640,6 +640,8 @@ const ProductProvider = ({ children }) => {
         clearFormFields();
         setSelectedMethod("");
         setCartData([])
+        setCartItems([])
+        localStorage.removeItem("cart");
         console.log("Cart clear: ", cartData)
       }
     } else {

@@ -54,8 +54,6 @@ const Cart = () => {
     fetchCart();
   }, [setCartItems]);
 
-  console.log(cartData)
-
 
   const removeFromCart = async (productId) => {
     const token = localStorage.getItem("token");
