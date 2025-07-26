@@ -15,7 +15,7 @@ const MyOrders = () => {
     totalOrderValue,
   } = useProduct();
 
-  console.log(orderedList);
+
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -32,7 +32,7 @@ const MyOrders = () => {
         }
         const result = await response.json();
         setOrderedList(result.data);
-        console.log(result.data);
+        // console.log(result.data);
         setAddressData(false);
       } catch (error) {
         console.log("Error fetching orders data.");
@@ -42,7 +42,6 @@ const MyOrders = () => {
     fetchOrders();
   }, []);
 
-  console.log(orderedList);
 
   return (
     <>

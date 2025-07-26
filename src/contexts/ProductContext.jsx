@@ -290,7 +290,6 @@ const ProductProvider = ({ children }) => {
   const delivery = totalCartValue > 2999 ? "Free Delivery" : `₹${deliveryFee}`;
   const discount = totalCartValue;
 
-  console.log(totalCartValue)
 
   const location = useLocation();
 
@@ -641,6 +640,7 @@ const ProductProvider = ({ children }) => {
         clearFormFields();
         setSelectedMethod("");
         setCartData([])
+        console.log("Cart clear: ", cartData)
       }
     } else {
       toast.error(
