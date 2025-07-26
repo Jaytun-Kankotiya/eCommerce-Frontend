@@ -131,7 +131,14 @@ const ProductProvider = ({ children }) => {
       ...prev,
       [productId]: sizeOption,
     }));
+    setCartData((prev) =>
+      prev.map((item) =>
+        item.id === productId ? { ...item, size: sizeOption } : item
+      )
+    );
   };
+
+  console.log(cartData);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -290,7 +297,6 @@ const ProductProvider = ({ children }) => {
   const delivery = totalCartValue > 2999 ? "Free Delivery" : `₹${deliveryFee}`;
   const discount = totalCartValue;
 
-
   const location = useLocation();
 
   const addressFormHandler = async (address) => {
@@ -380,8 +386,6 @@ const ProductProvider = ({ children }) => {
       setAddressList((prev) => [...prev, newAdd]);
     }
   };
-
-
 
   const handleSaveAddress = async () => {
     const newAddress = await addressFormHandler(addressData);
@@ -591,9 +595,13 @@ const ProductProvider = ({ children }) => {
   };
 
   const orderPlaceHandler = async () => {
-    
     const token = localStorage.getItem("token");
-    console.log("Token in localStorage:", token);
+    // console.log("Token in localStorage:", token);
+    const updatedCartData = cartData.map((item) => ({
+      ...item,
+      size: size[item.id] || item.size || "N/A",
+      quantity: quantity[item.id] ?? item.quantity ?? 1 
+    }));
     if (!token) {
       toast.error("Please Login to place your order.");
       return;
@@ -606,43 +614,40 @@ const ProductProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          cartData,
+          cartData: updatedCartData,
           ...addressData,
           selectedMethod,
           totalOrderValue,
         }),
       });
-      console.log("Cart Items: ", cartData)
-      console.log("Address Data: ", addressData)
-      console.log("Payment Method: ", selectedMethod)
       const result = await response.json();
       if (response.ok) {
         toast.success("Order Placed Successfully. Thank you for shopping.");
         return result.data;
       } else {
-        toast.error(result.error || "Failed to place an order.")
+        toast.error(result.error || "Failed to place an order.");
       }
     } catch (error) {
       toast.error("Something went wrong, please try again.");
     }
   };
 
-    const placeOrderHandler = async () => {
+  const placeOrderHandler = async () => {
     const isAddressValid = requireFields.every((field) =>
       addressData[field]?.trim()
     );
     if (isAddressValid && selectedMethod) {
       const orderResult = await orderPlaceHandler();
-      console.log("OrderResult: ",orderResult)
+      console.log("OrderResult: ", orderResult);
       if (orderResult) {
         navigate("/orders");
         // toast.success("Order placed");
         clearFormFields();
         setSelectedMethod("");
-        setCartData([])
-        setCartItems([])
+        setCartData([]);
+        setCartItems([]);
         localStorage.removeItem("cart");
-        console.log("Cart clear: ", cartData)
+        console.log("Cart clear: ", cartData);
       }
     } else {
       toast.error(
@@ -653,7 +658,7 @@ const ProductProvider = ({ children }) => {
     }
   };
 
-    const totalOrderValue =
+  const totalOrderValue =
     totalCartValue +
     totalCartValue * 0.13 +
     (delivery === "Free Delivery" ? 0 : deliveryFee);
@@ -715,7 +720,7 @@ const ProductProvider = ({ children }) => {
           orderedList,
           setOrderedList,
           orderPlaceHandler,
-          totalOrderValue
+          totalOrderValue,
         }}
       >
         {children}
