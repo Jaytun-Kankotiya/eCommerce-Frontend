@@ -135,7 +135,7 @@ const MyOrders = () => {
                         <button className="btn btn-outline-success me-2 mb-2">
                           Write a Product review
                         </button>
-                        <button className="btn btn-outline-warning mb-2">
+                        <button className="btn btn-outline-warning me-2 mb-2">
                           Get Product Support
                         </button>
                       </div>

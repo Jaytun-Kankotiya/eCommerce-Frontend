@@ -160,7 +160,7 @@ const Checkout = () => {
                       </div>
                       <div className="d-flex justify-content-between">
                         <p>Taxes (GST/HST)</p>
-                        <p>₹{totalCartValue * 0.13}</p>
+                        <p>₹{(totalCartValue * 0.13).toFixed(2)}</p>
                       </div>
                       <hr />
                       <div className="d-flex justify-content-between">

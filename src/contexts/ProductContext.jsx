@@ -3,6 +3,7 @@ import { Navigate, useParams, useLocation } from "react-router-dom";
 import useFetch from "../useFetch";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 // import { useLocation } from "react-router-dom";
 
 const ProductContext = createContext();
@@ -288,6 +289,39 @@ const ProductProvider = ({ children }) => {
     });
     navigate("/login");
   };
+
+  // const navigate = useNavigate();
+
+  // const useTokenExpiryCheck = () => {
+  
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          const currentTime = Date.now() / 1000;
+
+          if (decoded.exp < currentTime) {
+            localStorage.removeItem("token");
+            navigate("/login");
+          } else {
+            const timeOut = (decoded.exp - currentTime) * 1000;
+            const timer = setTimeout(() => {
+              localStorage.removeItem("token");
+              navigate("/login")
+            }, timeOut);
+            return () => clearTimeout(timer);
+          }
+        } catch (error) {
+          console.error("Invalid token:", error);
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      }
+    }, []);
+  // }
+  // useTokenExpiryCheck()
 
   const totalCartValue = cartData.reduce(
     (acc, item) => acc + item.price * (quantity[item.id] || 1),
@@ -577,15 +611,26 @@ const ProductProvider = ({ children }) => {
             <input
               type="tel"
               name="phoneNumber"
-              value={addressData.phoneNumber}
-              onChange={(e) =>
-                setAddressData({
-                  ...addressData,
-                  [e.target.name]: e.target.value,
-                })
-              }
+              value={addressData.phoneNumber?.toString() || ""}
+              onChange={(e) => {
+                const input = e.target.value;
+                if (/^\d{0,10}$/.test(input)) {
+                  setAddressData({
+                    ...addressData,
+                    phoneNumber: input,
+                  });
+                }
+              }}
+              onPaste={(e) => {
+                const paste = e.clipboardData.getData("text");
+                if (!/^\d{0,10}$/.test(paste)) {
+                  e.preventDefault();
+                }
+              }}
               className="form-control"
               placeholder="Phone Number"
+              maxLength="10"
+              inputMode="numeric"
               style={{ height: "50px" }}
             />
           </form>
@@ -600,7 +645,7 @@ const ProductProvider = ({ children }) => {
     const updatedCartData = cartData.map((item) => ({
       ...item,
       size: size[item.id] || item.size || "N/A",
-      quantity: quantity[item.id] ?? item.quantity ?? 1 
+      quantity: quantity[item.id] ?? item.quantity ?? 1,
     }));
     if (!token) {
       toast.error("Please Login to place your order.");
