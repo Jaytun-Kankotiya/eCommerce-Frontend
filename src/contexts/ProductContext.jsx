@@ -1,10 +1,8 @@
 import { useContext, useState, createContext, useEffect } from "react";
 import { Navigate, useParams, useLocation } from "react-router-dom";
-import useFetch from "../useFetch";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-// import { useLocation } from "react-router-dom";
 
 const ProductContext = createContext();
 
@@ -27,14 +25,14 @@ const ProductProvider = ({ children }) => {
   const [addressList, setAddressList] = useState([]);
   const [selectedMethod, setSelectedMethod] = useState("");
   const [orderedList, setOrderedList] = useState([]);
+  const [categoryProducts, setCategoryProducts] = useState([]);
+  const [cartData, setCartData] = useState([]);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
   });
-  const [categoryProducts, setCategoryProducts] = useState([]);
-  const [cartData, setCartData] = useState([]);
   const [addressData, setAddressData] = useState({
     firstName: "",
     lastName: "",
@@ -48,6 +46,7 @@ const ProductProvider = ({ children }) => {
     country: "",
     saveAddress: false,
   });
+
 
   const clearFormFields = () => {
     setAddressData({
@@ -138,8 +137,6 @@ const ProductProvider = ({ children }) => {
       )
     );
   };
-
-  console.log(cartData);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -289,10 +286,6 @@ const ProductProvider = ({ children }) => {
     });
     navigate("/login");
   };
-
-  // const navigate = useNavigate();
-
-  // const useTokenExpiryCheck = () => {
   
     useEffect(() => {
       const token = localStorage.getItem("token");
@@ -320,8 +313,6 @@ const ProductProvider = ({ children }) => {
         }
       }
     }, []);
-  // }
-  // useTokenExpiryCheck()
 
   const totalCartValue = cartData.reduce(
     (acc, item) => acc + item.price * (quantity[item.id] || 1),
@@ -331,13 +322,9 @@ const ProductProvider = ({ children }) => {
   const delivery = totalCartValue > 2999 ? "Free Delivery" : `₹${deliveryFee}`;
   const discount = totalCartValue;
 
-  const location = useLocation();
-
   const addressFormHandler = async (address) => {
     try {
       const token = localStorage.getItem("token");
-      // const isAlreadyExist = addressList.some((item) => item.email === address.email)
-      // if(!isAlreadyExist){
       const isUpdate = !!address._id;
       const response = await fetch(
         `http://localhost:3000/address${isUpdate ? `/${address._id}` : ""}`,
@@ -363,8 +350,6 @@ const ProductProvider = ({ children }) => {
       );
       const result = await response.json();
       if (response.ok) {
-        // const data = await response.json();
-        // setAddressList((prev) => [...prev, data]);
         toast.success(
           isUpdate ? "Address updated successfully" : "New Address added."
         );
@@ -641,7 +626,6 @@ const ProductProvider = ({ children }) => {
 
   const orderPlaceHandler = async () => {
     const token = localStorage.getItem("token");
-    // console.log("Token in localStorage:", token);
     const updatedCartData = cartData.map((item) => ({
       ...item,
       size: size[item.id] || item.size || "N/A",
@@ -686,7 +670,6 @@ const ProductProvider = ({ children }) => {
       console.log("OrderResult: ", orderResult);
       if (orderResult) {
         navigate("/orders");
-        // toast.success("Order placed");
         clearFormFields();
         setSelectedMethod("");
         setCartData([]);
