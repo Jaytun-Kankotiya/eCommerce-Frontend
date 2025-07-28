@@ -16,7 +16,8 @@ const Address = () => {
     addressFormHandler,
     fetchAddressData,
     handleSaveAddress,
-    defaultAddress, setDefaultAddress
+    defaultAddress,
+    setDefaultAddress,
   } = useProduct();
 
   const [showAddressForm, setShowAddressForm] = useState(false);
@@ -58,6 +59,7 @@ const Address = () => {
       province: "",
       country: "",
       saveAddress: false,
+      defaultAddress: false
     });
   }, []);
 
@@ -88,11 +90,51 @@ const Address = () => {
     setShowAddressForm(true);
   };
 
-  // const defaultAddressHandler = (e) => {
-  //   setDefaultAddress((e.target.value))
+  // const defaultAddressHandler = (id) => {
+  //   setDefaultAddress(id)
   // }
 
-  console.log(defaultAddress)
+  // useEffect(() => {
+  //   const defaultAddr = addressList.find((item) => item.defaultAddress)
+  //   if(defaultAddr){
+  //     setDefaultAddress(defaultAddr._id)
+  //     localStorage.setItem("defaultAddress", defaultAddr._id)
+  //   }
+  // }, [addressList])
+
+  console.log(defaultAddress);
+
+  const defaultAddressUpdate = async (addressId) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `http://localhost:3000/address/${addressId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            defaultAddress: true
+          })
+        }
+      )
+      if(!response.ok){
+        throw new Error("Failed to update default address.")
+      }
+      const refreshed = await fetch("http://localhost:3000/address", {
+        headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      })
+      const result = await refreshed.json()
+      if(result.data){
+        setAddressList(result.data)
+        setDefaultAddress(addressId)
+      }
+    } catch (error) {}
+  };
 
   return (
     <>
@@ -125,78 +167,90 @@ const Address = () => {
             </button>
           </div>
         )}
-        <div> 
+        <div>
           {addressList.length > 0 ? (
             <>
               <div className="row">
-                {/* <label htmlFor=""> */}
-                {/* <input onChange={(e) => setDefaultAddress(e.target.value)} type="radio" name="defaultAddress" /> */}
-                {addressList.map((item, index) => (
-                  <div className="col-md-6 mb-4" key={index}>
-                    <div className="card h-100 mb-2">
-                      <div className="card-body">
-                        <div className="d-flex align-items-center justify-content-between ">
-                          <div>
-                            <div className="form-check mb-2">
-                              <input type="radio"
-                              name="defaultAddress"
-                              value={item._id}
-                              checked={defaultAddress === item._id}
-                              onChange={(e) => setDefaultAddress(e.target.value)}
-                              id={`default-${item._id}`}
-                              />
-                              <label className="form-check-label fw-bold" htmlFor={`default-${item._id}`}>Set as Default</label>
+                {addressList.map((item, index) => {
+                  const isSelected = item.defaultAddress === true;
+                  return (
+                    <div className="col-md-6 mb-4" key={index}>
+                      <div
+                        className={`card h-100 mb-2 ${
+                          isSelected ? "border-warning border-2" : ""
+                        }`}
+                        style={{ cursor: "pointer" }}
+                        onClick={() =>{
+                          if(!item.defaultAddress){
+                            defaultAddressUpdate(item._id)
+                          }
+                           }}
+                      >
+                        <div className="card-body">
+                          <div className="d-flex align-items-center justify-content-between ">
+                            <div>
+                              {isSelected && (
+                                <p className="text-success mt-2 fw-bold">
+                                  This is your default address
+                                </p>
+                              )}
+
+                              <h5 className="card-title mb-3">
+                                {item.firstName} {item.lastName}
+                              </h5>
+                              <p className="mb-1">
+                                <strong>Email:</strong> {item.email}
+                              </p>
+                              <p className="mb-1">
+                                <strong>Phone Number:</strong>{" "}
+                                {item.phoneNumber}
+                              </p>
+                              <p className="mb-1">
+                                <strong>Address:</strong> {item.addressLine1}{" "}
+                                {item.addressLine2}, {item.postalcode}
+                              </p>
+                              <p className="mb-1">
+                                <strong>City:</strong> {item.city}
+                              </p>
+                              <p className="mb-1">
+                                <strong>Province:</strong> {item.province}
+                              </p>
+                              <p className="mb-1">
+                                <strong>Country:</strong> {item.country}
+                              </p>
                             </div>
 
-                            <h5 className="card-title mb-3">
-                              {item.firstName} {item.lastName}
-                            </h5>
-                            <p className="mb-1">
-                              <strong>Email:</strong> {item.email}
-                            </p>
-                            <p className="mb-1">
-                              <strong>Phone Number:</strong> {item.phoneNumber}
-                            </p>
-                            <p className="mb-1">
-                              <strong>Address:</strong> {item.addressLine1}{" "}
-                              {item.addressLine2}, {item.postalcode}
-                            </p>
-                            <p className="mb-1">
-                              <strong>City:</strong> {item.city}
-                            </p>
-                            <p className="mb-1">
-                              <strong>Province:</strong> {item.province}
-                            </p>
-                            <p className="mb-1">
-                              <strong>Country:</strong> {item.country}
-                            </p>
-                          </div>
-
-                          <div className="d-flex flex-column gap-3">
-                            <button
-                              onClick={() => editAddress(item)}
-                              className="btn btn-outline-primary"
-                            >
-                              Edit
-                            </button>
-                            <button
-                              onClick={() => removeAddress(item)}
-                              className="btn btn-danger"
-                            >
-                              Delete
-                            </button>
+                            <div className="d-flex flex-column gap-3">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  editAddress(item);
+                                }}
+                                className="btn btn-outline-primary"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => removeAddress(item)}
+                                className="btn btn-danger"
+                              >
+                                Delete
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
                 {/* </label> */}
               </div>
             </>
           ) : (
             !showAddressForm && (
-              <p className="fs-5 text-center mt-3">Please add a new address to proceed.</p>
+              <p className="fs-5 text-center mt-3">
+                Please add a new address to proceed.
+              </p>
             )
           )}
         </div>

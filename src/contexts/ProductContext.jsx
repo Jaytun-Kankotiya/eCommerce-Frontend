@@ -46,6 +46,7 @@ const ProductProvider = ({ children }) => {
     province: "",
     country: "",
     saveAddress: false,
+    default: false
   });
 
 
@@ -346,6 +347,7 @@ const ProductProvider = ({ children }) => {
             city: address.city,
             province: address.province,
             country: address.country,
+            defaultAddress: address.defaultAddress || false
           }),
         }
       );
@@ -412,7 +414,7 @@ const ProductProvider = ({ children }) => {
     if (newAddress) {
       setAddressList((prev) => {
         const isUpdate = !!addressData._id;
-        console.log(isUpdate);
+        // console.log(isUpdate);
 
         return isUpdate
           ? prev.map((item) =>
@@ -421,6 +423,43 @@ const ProductProvider = ({ children }) => {
           : [...prev, newAddress];
       });
       clearFormFields();
+    }
+  };
+
+  const orderPlaceHandler = async () => {
+    const token = localStorage.getItem("token");
+    const updatedCartData = cartData.map((item) => ({
+      ...item,
+      size: size[item.id] || item.size || "N/A",
+      quantity: quantity[item.id] ?? item.quantity ?? 1,
+    }));
+    if (!token) {
+      toast.error("Please Login to place your order.");
+      return;
+    }
+    try {
+      const response = await fetch("http://localhost:3000/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          cartData: updatedCartData,
+          selectedMethod,
+          totalOrderValue,
+          ...addressData,
+        }),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        toast.success("Order Placed Successfully. Thank you for shopping.");
+        return result.data;
+      } else {
+        toast.error(result.error || "Failed to place an order.");
+      }
+    } catch (error) {
+      toast.error("Something went wrong, please try again.");
     }
   };
 
@@ -625,48 +664,11 @@ const ProductProvider = ({ children }) => {
     );
   };
 
-  const orderPlaceHandler = async () => {
-    const token = localStorage.getItem("token");
-    const updatedCartData = cartData.map((item) => ({
-      ...item,
-      size: size[item.id] || item.size || "N/A",
-      quantity: quantity[item.id] ?? item.quantity ?? 1,
-    }));
-    if (!token) {
-      toast.error("Please Login to place your order.");
-      return;
-    }
-    try {
-      const response = await fetch("http://localhost:3000/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          cartData: updatedCartData,
-          ...addressData,
-          selectedMethod,
-          totalOrderValue,
-        }),
-      });
-      const result = await response.json();
-      if (response.ok) {
-        toast.success("Order Placed Successfully. Thank you for shopping.");
-        return result.data;
-      } else {
-        toast.error(result.error || "Failed to place an order.");
-      }
-    } catch (error) {
-      toast.error("Something went wrong, please try again.");
-    }
-  };
-
   const placeOrderHandler = async () => {
     const isAddressValid = requireFields.every((field) =>
       addressData[field]?.trim()
     );
-    if (isAddressValid && selectedMethod) {
+    if ((isAddressValid ) && selectedMethod) {
       const orderResult = await orderPlaceHandler();
       console.log("OrderResult: ", orderResult);
       if (orderResult) {

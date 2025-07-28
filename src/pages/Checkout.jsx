@@ -7,8 +7,6 @@ import { toast } from "react-toastify";
 
 const Checkout = () => {
   const {
-    // cartData,
-    // setCartData,
     cartItems,
     quantity,
     discount,
@@ -25,22 +23,85 @@ const Checkout = () => {
     setSelectedMethod,
     orderPlaceHandler,
     totalOrderValue,
-    defaultAddress, setDefaultAddress
+    defaultAddress,
+    setDefaultAddress,
+    addressList,
+    setAddressList,
   } = useProduct();
+
+  const [useNewAddress, setUseNewAddress] = useState(false);
+  const [addressShow, setAddressShow] = useState(null)
+
+  // useEffect(() => {
+  //   if(!defaultAddress && addressList.length > 0){
+  //     const defaultAdr = addressList.find((addr) => addr.defaultAddress)
+  //     if(defaultAdr){
+  //       setDefaultAddress(defaultAdr._id)
+  //     }
+  //   }
+  // }, [addressList])
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token")
+  //   const initializeDefaultAddress = async () => {
+  //     if(addressList.length === 0) return
+
+  //     const defaultAdr = addressList.find((addr) => addr.defaultAddress)
+  //     if(!defaultAdr) return
+      
+  //     setDefaultAddress(defaultAdr._id)
+
+  //     try {
+  //       const response = await fetch(`http://localhost:3000/address/${defaultAdr._id}`, {
+  //       headers: {
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     })
+  //     const result = await response.json()
+  //     if(result.data){
+  //       setAddressData(result.data)
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to fetch default address", error);
+  //   }
+  //   }
+  //   initializeDefaultAddress()
+  // }, [addressList])
 
   const paymentMethods = [
     "Credit or Debit Card",
     "PayPal",
     "Apple Pay",
     "Cryptocurrencies",
-  ];
+  ]; 
 
   useEffect(() => {
-    if(defaultAddress){
-      localStorage.setItem("defaultAddress", defaultAddress)
+    const fetchDefaultAddress = async () => {
+      const token = localStorage.getItem("token")
+    try {
+        const refreshed = await fetch("http://localhost:3000/address/default", {
+        headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      })
+      const result = await refreshed.json()
+      
+      if(result.data){
+        console.log("Result:", result.data)
+        setAddressShow(result.data)
+        setDefaultAddress(result.data._id)
+      }
+    } catch (error) {
+      console.error("Failed to fetch default address", error);
     }
+    }
+    fetchDefaultAddress()
     window.scrollTo(0, 0);
-  }, [defaultAddress]);
+  }, []);
+
+  const showDefaultAddress =  addressShow;
+
+  console.log(showDefaultAddress);
 
   return (
     <>
@@ -53,75 +114,95 @@ const Checkout = () => {
                 <h2 className="mt-5 py-3 text-center">Checkout</h2>
                 <div className="row">
                   <div className="col-md-6 ms-1 mx-4">
-                    <div>
-                      {defaultAddress ? (
-                        <div className="card h-100 mb-2 mx-4">
-                          <div className="card-body">
-                            <div className="d-flex align-items-center justify-content-between ">
-                              <div>
+                    <div className="row">
+                      {
+                        !useNewAddress && showDefaultAddress && (
+                          <div
+                            className={`card border-primary border-3 shadow-sm p-3 mb-4 mx-4`}
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              toast.info(
+                                "This address will be used for delivery"
+                              )
+                            }
+                          >
+                            <div className="card-body">
+                              <div className="d-flex align-items-center justify-content-between ">
+                              <div className="col-md-6">
                                 <h5 className="card-title mb-3">
-                                  {defaultAddress.firstName}{" "}
-                                  {defaultAddress.lastName}
+                                  {showDefaultAddress.firstName}{" "}
+                                  {showDefaultAddress.lastName}
                                 </h5>
                                 <p className="mb-1">
-                                  <strong>Email:</strong> {defaultAddress.email}
+                                  <strong>Email:</strong>{" "}
+                                  {showDefaultAddress.email}
                                 </p>
                                 <p className="mb-1">
                                   <strong>Phone Number:</strong>{" "}
-                                  {defaultAddress.phoneNumber}
+                                  {showDefaultAddress.phoneNumber}
                                 </p>
                                 <p className="mb-1">
                                   <strong>Address:</strong>{" "}
-                                  {defaultAddress.addressLine1}{" "}
-                                  {defaultAddress.addressLine2},{" "}
-                                  {defaultAddress.postalcode}
+                                  {showDefaultAddress.addressLine1}{" "}
+                                  {showDefaultAddress.addressLine2},{" "}
+                                  {showDefaultAddress.postalcode}
                                 </p>
                                 <p className="mb-1">
-                                  <strong>City:</strong> {defaultAddress.city}
+                                  <strong>City:</strong>{" "}
+                                  {showDefaultAddress.city}
                                 </p>
                                 <p className="mb-1">
                                   <strong>Province:</strong>{" "}
-                                  {defaultAddress.province}
+                                  {showDefaultAddress.province}
                                 </p>
                                 <p className="mb-1">
                                   <strong>Country:</strong>{" "}
-                                  {defaultAddress.country}
+                                  {showDefaultAddress.country}
                                 </p>
+                              </div>
 
+                              <div className="col-md-6">
                                 <div className="d-flex flex-column gap-3">
                                   <button
-                                    onClick={() => editAddress(item)}
-                                    className="btn btn-outline-primary"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setUseNewAddress(true);
+                                    }}
+                                    className="btn btn-warning"
                                   >
-                                    Edit
+                                    Use a different address
                                   </button>
-                                  <button
+                                  <Link
+                                    to={"/address"}
                                     onClick={() => removeAddress(item)}
                                     className="btn btn-info"
                                   >
                                     Change Address
-                                  </button>
+                                  </Link>
                                 </div>
+                              </div>
+                              
+                                
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ) : (
-                        <div className="mx-4">
-                          <p>
-                            No default address found. Please select or add an
-                            address.
-                          </p>
-                        </div>
-                      )}
+                        )
+                        //  : (
+                        //   <div className="mx-4">
+                        //     <p>
+                        //       No default address found. Please select or add an
+                        //       address.
+                        //     </p>
+                        //   </div>
+                        // )
+                      }
                     </div>
 
-                    {addressFormData()}
+                    {useNewAddress && addressFormData()}
                     <div className="d-flex gap-3 mx-4">
                       <input
                         className="form-check-input"
                         type="checkbox"
-                        // name="saveAddress"
                         checked={addressData.saveAddress || false}
                         onChange={handleCheckboxChange}
                         style={{ height: "20px", width: "20px" }}
