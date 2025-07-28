@@ -24,7 +24,8 @@ const Checkout = () => {
     selectedMethod,
     setSelectedMethod,
     orderPlaceHandler,
-    totalOrderValue
+    totalOrderValue,
+    defaultAddress, setDefaultAddress
   } = useProduct();
 
   const paymentMethods = [
@@ -35,12 +36,11 @@ const Checkout = () => {
   ];
 
   useEffect(() => {
+    if(defaultAddress){
+      localStorage.setItem("defaultAddress", defaultAddress)
+    }
     window.scrollTo(0, 0);
-  }, []);
-
-  //   const navigate = useNavigate()
-
-  // console.log(totalOrderValue)
+  }, [defaultAddress]);
 
   return (
     <>
@@ -53,6 +53,69 @@ const Checkout = () => {
                 <h2 className="mt-5 py-3 text-center">Checkout</h2>
                 <div className="row">
                   <div className="col-md-6 ms-1 mx-4">
+                    <div>
+                      {defaultAddress ? (
+                        <div className="card h-100 mb-2 mx-4">
+                          <div className="card-body">
+                            <div className="d-flex align-items-center justify-content-between ">
+                              <div>
+                                <h5 className="card-title mb-3">
+                                  {defaultAddress.firstName}{" "}
+                                  {defaultAddress.lastName}
+                                </h5>
+                                <p className="mb-1">
+                                  <strong>Email:</strong> {defaultAddress.email}
+                                </p>
+                                <p className="mb-1">
+                                  <strong>Phone Number:</strong>{" "}
+                                  {defaultAddress.phoneNumber}
+                                </p>
+                                <p className="mb-1">
+                                  <strong>Address:</strong>{" "}
+                                  {defaultAddress.addressLine1}{" "}
+                                  {defaultAddress.addressLine2},{" "}
+                                  {defaultAddress.postalcode}
+                                </p>
+                                <p className="mb-1">
+                                  <strong>City:</strong> {defaultAddress.city}
+                                </p>
+                                <p className="mb-1">
+                                  <strong>Province:</strong>{" "}
+                                  {defaultAddress.province}
+                                </p>
+                                <p className="mb-1">
+                                  <strong>Country:</strong>{" "}
+                                  {defaultAddress.country}
+                                </p>
+
+                                <div className="d-flex flex-column gap-3">
+                                  <button
+                                    onClick={() => editAddress(item)}
+                                    className="btn btn-outline-primary"
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    onClick={() => removeAddress(item)}
+                                    className="btn btn-info"
+                                  >
+                                    Change Address
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="mx-4">
+                          <p>
+                            No default address found. Please select or add an
+                            address.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
                     {addressFormData()}
                     <div className="d-flex gap-3 mx-4">
                       <input

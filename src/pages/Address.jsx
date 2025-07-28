@@ -16,6 +16,7 @@ const Address = () => {
     addressFormHandler,
     fetchAddressData,
     handleSaveAddress,
+    defaultAddress, setDefaultAddress
   } = useProduct();
 
   const [showAddressForm, setShowAddressForm] = useState(false);
@@ -87,6 +88,12 @@ const Address = () => {
     setShowAddressForm(true);
   };
 
+  // const defaultAddressHandler = (e) => {
+  //   setDefaultAddress((e.target.value))
+  // }
+
+  console.log(defaultAddress)
+
   return (
     <>
       <Header />
@@ -118,16 +125,29 @@ const Address = () => {
             </button>
           </div>
         )}
-        <div>
+        <div> 
           {addressList.length > 0 ? (
             <>
               <div className="row">
+                {/* <label htmlFor=""> */}
+                {/* <input onChange={(e) => setDefaultAddress(e.target.value)} type="radio" name="defaultAddress" /> */}
                 {addressList.map((item, index) => (
                   <div className="col-md-6 mb-4" key={index}>
-                    <div className="card card  h-100 mb-2">
+                    <div className="card h-100 mb-2">
                       <div className="card-body">
                         <div className="d-flex align-items-center justify-content-between ">
                           <div>
+                            <div className="form-check mb-2">
+                              <input type="radio"
+                              name="defaultAddress"
+                              value={item._id}
+                              checked={defaultAddress === item._id}
+                              onChange={(e) => setDefaultAddress(e.target.value)}
+                              id={`default-${item._id}`}
+                              />
+                              <label className="form-check-label fw-bold" htmlFor={`default-${item._id}`}>Set as Default</label>
+                            </div>
+
                             <h5 className="card-title mb-3">
                               {item.firstName} {item.lastName}
                             </h5>
@@ -171,6 +191,7 @@ const Address = () => {
                     </div>
                   </div>
                 ))}
+                {/* </label> */}
               </div>
             </>
           ) : (

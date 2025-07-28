@@ -27,6 +27,7 @@ const ProductProvider = ({ children }) => {
   const [orderedList, setOrderedList] = useState([]);
   const [categoryProducts, setCategoryProducts] = useState([]);
   const [cartData, setCartData] = useState([]);
+  const [defaultAddress, setDefaultAddress] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -749,6 +750,7 @@ const ProductProvider = ({ children }) => {
           setOrderedList,
           orderPlaceHandler,
           totalOrderValue,
+          defaultAddress, setDefaultAddress
         }}
       >
         {children}
