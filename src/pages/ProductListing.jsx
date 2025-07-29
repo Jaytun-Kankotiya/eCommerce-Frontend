@@ -35,19 +35,16 @@ const ProductListing = () => {
   const productCategory = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/productListing`)
-      // console.log(response)
       if(response.ok){
         const data = await response.json()
         setCategoryProducts(data)
         setLoading(false)
-        // console.log(data)
       }
     } catch (error) {
       console.log("Error fetching products.")
       setLoading(false)
     }
   }
-
 
   const ratingHandler = (e) => {
     setRatingFilter(e.target.value);
@@ -80,7 +77,6 @@ const ProductListing = () => {
       if (priceFilter === 'highToLow') return b.price - a.price;
       return 0;
     })
-    
   )
 
   useEffect(() => {

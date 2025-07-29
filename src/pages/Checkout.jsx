@@ -202,7 +202,7 @@ const Checkout = () => {
                               onClick={() => setSelectedMethod(method)}
                               className={`p-3 border rounded d-flex align-items-center gap-3${
                                 selectedMethod === method
-                                  ? "border border-1 border-primary bg-light shadow-sm"
+                                  ? "border border-2 border-success bg-light shadow-sm"
                                   : "border-secondary"
                               }`}
                               style={{

@@ -22,7 +22,9 @@ const ProductDetails = () => {
     addAndRemoveFromCart,
     decreaseQuantity,
     increaseQuantity,
-    categoryProducts, setCategoryProducts
+    categoryProducts, setCategoryProducts,
+    handleBuyNow,
+    search
   } = useProduct();
 
   const [similarProducts, setSimilarProducts] = useState([])
@@ -71,7 +73,9 @@ if(!product) return <p className='container py-3'>Product Not Found.</p>
     );
   };
 
-
+ const productWithSearch = categoryProducts.filter((item) => 
+  item.name.toLowerCase().includes(search?.toLowerCase() || '')
+ )
 
   return (
     <div className="bg-light">
@@ -93,9 +97,9 @@ if(!product) return <p className='container py-3'>Product Not Found.</p>
                         objectFit: 'cover',
                       }}
                     />
-                    <Link to="/cart" className="btn btn-primary w-100  mt-3">
+                    <button onClick={() => handleBuyNow(product)} className="btn btn-primary w-100  mt-3">
                       Buy Now
-                    </Link>
+                    </button>
                     <button
                       onClick={() => addAndRemoveFromCart(product)}
                       className="btn btn-secondary w-100  mt-2"
@@ -193,10 +197,6 @@ if(!product) return <p className='container py-3'>Product Not Found.</p>
                             checked={size === sizeOption}
                             onChange={() =>
                               sizeHandler(product.id, sizeOption)
-                              // setSize((prev) => ({
-                              //   ...prev,
-                              //   [product.id]: sizeOption,
-                              // }))
                             }
                             style={{ display: 'none' }}
                           />
@@ -252,8 +252,8 @@ if(!product) return <p className='container py-3'>Product Not Found.</p>
                   <div>
                     <h4>Description:</h4>
                     <ul>
-                      {product?.descriptions?.map((desc) => (
-                        <li>{desc}</li>
+                      {product?.descriptions?.map((desc, index) => (
+                        <li key={index}>{desc}</li>
                       ))}
                     </ul>
                   </div>
@@ -266,7 +266,7 @@ if(!product) return <p className='container py-3'>Product Not Found.</p>
           <div>
             <h4 className="ms-2">More items you may like in apparel</h4>
             <div className="row py-2">
-              {categoryProducts
+              {productWithSearch
                 .filter((items) => items.category === product.category && items.id !== product.id)
                 .slice(0, 8)
                 .map((item) => (

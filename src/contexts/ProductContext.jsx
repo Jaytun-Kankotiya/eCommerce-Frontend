@@ -327,6 +327,7 @@ const ProductProvider = ({ children }) => {
   const delivery = totalCartValue > 2999 ? "Free Delivery" : `₹${deliveryFee}`;
   const discount = totalCartValue;
 
+
   const addressFormHandler = async (address) => {
     try {
       const token = localStorage.getItem("token");
@@ -417,8 +418,6 @@ const ProductProvider = ({ children }) => {
     if (newAddress) {
       setAddressList((prev) => {
         const isUpdate = !!addressData._id;
-        // console.log(isUpdate);
-
         return isUpdate
           ? prev.map((item) =>
               item._id === newAddress._id ? newAddress : item
@@ -693,8 +692,6 @@ const ProductProvider = ({ children }) => {
     );
   };
 
-  // console.log("Selected Address:",selectedAddress)
-
   const placeOrderHandler = async () => {
     const isAddressValid = requireFields.every((field) =>
       addressData[field]?.trim()
@@ -724,12 +721,50 @@ const ProductProvider = ({ children }) => {
     totalCartValue * 0.13 +
     (delivery === "Free Delivery" ? 0 : deliveryFee);
 
+
+  const handleBuyNow = async (product) => {
+    if(!isLoggedIn){
+      toast.error("Please login to continue")
+      navigate('/login')
+      return
+    }
+
+    try {
+      const token = localStorage.getItem("token")
+
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/cartItems`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(product)
+      })
+      const result = await response.json()
+
+      if(response.ok){
+        toast.success('Added to cart')
+
+      setCartData((prev) => {
+      const alreadyInCart = prev.some((item) => item._id === product._id)
+      return alreadyInCart ? prev : [product, ...prev]
+    })
+    navigate('/cart')
+    }else{
+      toast.error(response?.error || "Product is already in cart")
+    }
+    } catch (error) {
+      toast.error("Something went wrong while adding to cart")
+    }
+}
+
   return (
     <>
       <ProductContext.Provider
         value={{
           wishlist,
           setWishlist,
+          handleBuyNow,
           cartItems,
           setCartItems,
           quantity,

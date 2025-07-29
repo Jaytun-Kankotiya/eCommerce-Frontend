@@ -109,7 +109,7 @@ const Cart = () => {
                 </h3>
                 <div className="row">
                   <div className="col-md-6 ms-1">
-                    {displayItems.map((item) => (
+                    {displayItems.slice().reverse().map((item) => (
                       <div className="card mb-3" key={item.id}>
                         <div className="row">
                           <div className="col-md-6">
