@@ -56,7 +56,6 @@ const Checkout = () => {
         const result = await refreshed.json();
 
         if (result.data) {
-          // console.log("Result:", result.data);
           setAddressShow(result.data);
           setDefaultAddress(result.data._id);
         }
