@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import Header from '../components/Header';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useProduct } from '../contexts/ProductContext';
 
 const Home = () => {
@@ -8,6 +8,14 @@ const Home = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get('query');
+
+  const {setPriceFilter, setCategory, setRatingFilter} = useProduct()
+
+  useEffect(() => {
+    setPriceFilter('')
+    setRatingFilter('')
+    setCategory('')
+  })
 
   return (
     <>

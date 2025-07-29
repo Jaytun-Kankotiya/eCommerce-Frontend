@@ -93,7 +93,6 @@ const ProductListing = () => {
 
 
 
-
   if(loading) return <h5 className='mt-5 container py-5 text-center'>Loading...</h5>
   if(!categoryProducts.length) return <h5 className='mt-5 container py-5 text-center'>Failed to fetch the product...</h5>
 
@@ -116,10 +115,10 @@ const ProductListing = () => {
                 Clear
               </button>
             </div>
-            <br />
+            {/* <br />
             <div>
               <h4>Price</h4>
-            </div>
+            </div> */}
             <br />
             <div>
               <h4>Category</h4>
