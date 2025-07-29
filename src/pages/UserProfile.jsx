@@ -82,7 +82,7 @@ const UserProfile = () => {
     }
     try {
       const endpoint = formMode === "login" ? "verify" : "";
-      const url = `http://localhost:3000/userProfile/${endpoint}`;
+      const url = `https://e-commerce-backend-umber-nu.vercel.app/userProfile/${endpoint}`;
 
       const response = await fetch(url, {
         method: "POST",

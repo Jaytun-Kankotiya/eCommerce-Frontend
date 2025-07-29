@@ -34,7 +34,7 @@ const Cart = () => {
     const fetchCart = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch("http://localhost:3000/cartItems", {
+        const response = await fetch("https://e-commerce-backend-umber-nu.vercel.app/cartItems", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -59,7 +59,7 @@ const Cart = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `http://localhost:3000/cartItems/${productId}`,
+        `https://e-commerce-backend-umber-nu.vercel.app/cartItems/${productId}`,
         {
           method: "DELETE",
           headers: {
@@ -87,7 +87,6 @@ const Cart = () => {
 
     if(allSizeSelected){
       navigate('/checkout')
-      // setCartData((prev) => [...prev, size: size[id]])
     }else{
       toast.error("Please select a size before proceeding!")
     }

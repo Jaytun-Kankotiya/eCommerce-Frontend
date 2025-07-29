@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/productListing': 'http://localhost:3000',
+      '/productListing': 'https://e-commerce-backend-umber-nu.vercel.app',
     },
   },
 });

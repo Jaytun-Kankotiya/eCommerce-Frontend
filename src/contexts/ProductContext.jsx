@@ -85,10 +85,10 @@ const ProductProvider = ({ children }) => {
         });
         try {
           const [cartRes, wishlistRes] = await Promise.all([
-            fetch("http://localhost:3000/cartItems", {
+            fetch("https://e-commerce-backend-umber-nu.vercel.app/cartItems", {
               headers: { Authorization: `Bearer ${token}` },
             }),
-            fetch("http://localhost:3000/wishlist", {
+            fetch("https://e-commerce-backend-umber-nu.vercel.app/wishlist", {
               headers: { Authorization: `Bearer ${token}` },
             }),
           ]);
@@ -146,7 +146,7 @@ const ProductProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/userProfile", {
+        const response = await fetch("https://e-commerce-backend-umber-nu.vercel.app/userProfile", {
           method: "GET",
           headers: {
             Authorization: userToken,
@@ -182,7 +182,7 @@ const ProductProvider = ({ children }) => {
     const isAlreadyInCart = cartItems.includes(product.id);
     try {
       if (isAlreadyInCart) {
-        await fetch(`http://localhost:3000/cartItems/${product.id}`, {
+        await fetch(`https://e-commerce-backend-umber-nu.vercel.app/cartItems/${product.id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -191,7 +191,7 @@ const ProductProvider = ({ children }) => {
         setCartItems((prev) => prev.filter((id) => id !== product.id));
         toast.info("Item removed from cart");
       } else {
-        const res = await fetch("http://localhost:3000/cartItems", {
+        const res = await fetch("https://e-commerce-backend-umber-nu.vercel.app/cartItems", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -232,7 +232,7 @@ const ProductProvider = ({ children }) => {
     try {
       if (isWishlisted) {
         const res = await fetch(
-          `http://localhost:3000/wishlist/${product.id}`,
+          `https://e-commerce-backend-umber-nu.vercel.app/wishlist/${product.id}`,
           {
             method: "DELETE",
             headers: {
@@ -244,7 +244,7 @@ const ProductProvider = ({ children }) => {
         setWishlist((prev) => prev.filter((id) => id !== product.id));
         toast.info("Item removed from wishlist");
       } else {
-        const res = await fetch("http://localhost:3000/wishlist", {
+        const res = await fetch("https://e-commerce-backend-umber-nu.vercel.app/wishlist", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -332,7 +332,7 @@ const ProductProvider = ({ children }) => {
       const token = localStorage.getItem("token");
       const isUpdate = !!address._id;
       const response = await fetch(
-        `http://localhost:3000/address${isUpdate ? `/${address._id}` : ""}`,
+        `https://e-commerce-backend-umber-nu.vercel.app/address${isUpdate ? `/${address._id}` : ""}`,
         {
           method: isUpdate ? "PUT" : "POST",
           headers: {
@@ -469,7 +469,7 @@ const ProductProvider = ({ children }) => {
 
 
     try {
-      const response = await fetch("http://localhost:3000/orders", {
+      const response = await fetch("https://e-commerce-backend-umber-nu.vercel.app/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

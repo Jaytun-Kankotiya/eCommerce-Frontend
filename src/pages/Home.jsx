@@ -4,17 +4,10 @@ import { useState } from 'react';
 import { useProduct } from '../contexts/ProductContext';
 
 const Home = () => {
-  // const { items } = useProduct();
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get('query');
-
-  // const searchFilter = searchQuery
-  //   ? items.filter((item) =>
-  //       item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  //     )
-  //   : items;
 
   return (
     <>

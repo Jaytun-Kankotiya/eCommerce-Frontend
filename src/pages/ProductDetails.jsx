@@ -2,7 +2,6 @@ import { Link, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import { useProduct } from '../contexts/ProductContext';
 import { useState, useEffect } from 'react';
-import useFetch from '../useFetch';
 
 const ProductDetails = () => {
   const {productId}  = useParams();
@@ -31,7 +30,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/productDetails/${productId}`)
+        const response = await fetch(`https://e-commerce-backend-umber-nu.vercel.app/productDetails/${productId}`)
         const data = await response.json()
         setProduct(data)
         setLoading(false)

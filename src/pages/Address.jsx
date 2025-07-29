@@ -27,7 +27,7 @@ const Address = () => {
     const fetchAddressData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch("http://localhost:3000/address", {
+        const response = await fetch("https://e-commerce-backend-umber-nu.vercel.app/address", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -68,7 +68,7 @@ const Address = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `http://localhost:3000/address/${address._id}`,
+        `https://e-commerce-backend-umber-nu.vercel.app/address/${address._id}`,
         {
           method: "DELETE",
           headers: {
@@ -91,17 +91,6 @@ const Address = () => {
     setShowAddressForm(true);
   };
 
-  // const defaultAddressHandler = (id) => {
-  //   setDefaultAddress(id)
-  // }
-
-  // useEffect(() => {
-  //   const defaultAddr = addressList.find((item) => item.defaultAddress)
-  //   if(defaultAddr){
-  //     setDefaultAddress(defaultAddr._id)
-  //     localStorage.setItem("defaultAddress", defaultAddr._id)
-  //   }
-  // }, [addressList])
 
   console.log(defaultAddress);
 
@@ -109,7 +98,7 @@ const Address = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `http://localhost:3000/address/${addressId}`,
+        `https://e-commerce-backend-umber-nu.vercel.app/address/${addressId}`,
         {
           method: "PATCH",
           headers: {
@@ -124,7 +113,7 @@ const Address = () => {
       if(!response.ok){
         throw new Error("Failed to update default address.")
       }
-      const refreshed = await fetch("http://localhost:3000/address", {
+      const refreshed = await fetch("https://e-commerce-backend-umber-nu.vercel.app/address", {
         headers: {
         Authorization: `Bearer ${token}`,
       },

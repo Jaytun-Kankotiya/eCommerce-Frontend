@@ -22,7 +22,7 @@ const Wishlist = () => {
     const fetchWishlist = async () => {
       const token = localStorage.getItem("token")
       try {
-        const response = await fetch('http://localhost:3000/wishlist',{
+        const response = await fetch('https://e-commerce-backend-umber-nu.vercel.app/wishlist',{
           headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -45,7 +45,7 @@ const Wishlist = () => {
   const removeItems = async (productId) => {
     const token = localStorage.getItem("token");
     try {
-      const response = await fetch(`http://localhost:3000/wishlist/${productId}`, {
+      const response = await fetch(`https://e-commerce-backend-umber-nu.vercel.app/wishlist/${productId}`, {
         method: "DELETE",
         headers: {
           'Authorization': `Bearer ${token}`

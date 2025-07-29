@@ -48,7 +48,7 @@ const Checkout = () => {
     const fetchDefaultAddress = async () => {
       const token = localStorage.getItem("token");
       try {
-        const refreshed = await fetch("http://localhost:3000/address/default", {
+        const refreshed = await fetch("https://e-commerce-backend-umber-nu.vercel.app/address/default", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
