@@ -28,6 +28,9 @@ const ProductProvider = ({ children }) => {
   const [categoryProducts, setCategoryProducts] = useState([]);
   const [cartData, setCartData] = useState([]);
   const [defaultAddress, setDefaultAddress] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState(null)
+  const [useNewAddress, setUseNewAddress] = useState(false);
+  const [showAddressForm, setShowAddressForm] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -429,14 +432,42 @@ const ProductProvider = ({ children }) => {
   const orderPlaceHandler = async () => {
     const token = localStorage.getItem("token");
     const updatedCartData = cartData.map((item) => ({
-      ...item,
-      size: size[item.id] || item.size || "N/A",
-      quantity: quantity[item.id] ?? item.quantity ?? 1,
-    }));
+    id: item.id,
+    name: item.name,
+    price: item.price,
+    imageLink: item.imageLink,
+    category: item.category,
+    rating: item.rating,
+    descriptions: item.descriptions,
+    quantity: quantity[item.id] ?? item.quantity ?? 1,
+    size: size[item.id] || item.size || "N/A",
+    // size: size[item.id] || item.size || "N/A",
+    // quantity: quantity[item.id] ?? item.quantity ?? 1,
+    }))
     if (!token) {
       toast.error("Please Login to place your order.");
       return;
     }
+    const addressToUse = useNewAddress ? addressData : selectedAddress
+    if(!addressToUse || !addressToUse.firstName){
+      toast.error("Please select or enter an address.")
+      return
+    }
+
+    const cleanAddress = {
+    firstName: addressToUse.firstName,
+    lastName: addressToUse.lastName || "",
+    email: addressToUse.email,
+    phoneNumber: addressToUse.phoneNumber,
+    addressLine1: addressToUse.addressLine1,
+    addressLine2: addressToUse.addressLine2 || "",
+    postalcode: addressToUse.postalcode,
+    city: addressToUse.city,
+    province: addressToUse.province,
+    country: addressToUse.country,
+  };
+
+
     try {
       const response = await fetch("http://localhost:3000/orders", {
         method: "POST",
@@ -448,7 +479,7 @@ const ProductProvider = ({ children }) => {
           cartData: updatedCartData,
           selectedMethod,
           totalOrderValue,
-          ...addressData,
+          ...cleanAddress,
         }),
       });
       const result = await response.json();
@@ -664,13 +695,15 @@ const ProductProvider = ({ children }) => {
     );
   };
 
+  console.log("Selected Address:",selectedAddress)
+
   const placeOrderHandler = async () => {
     const isAddressValid = requireFields.every((field) =>
       addressData[field]?.trim()
     );
-    if ((isAddressValid ) && selectedMethod) {
+    if ((isAddressValid || selectedAddress ) && selectedMethod) {
       const orderResult = await orderPlaceHandler();
-      console.log("OrderResult: ", orderResult);
+      // console.log("OrderResult: ", orderResult);
       if (orderResult) {
         navigate("/orders");
         clearFormFields();
@@ -752,7 +785,10 @@ const ProductProvider = ({ children }) => {
           setOrderedList,
           orderPlaceHandler,
           totalOrderValue,
-          defaultAddress, setDefaultAddress
+          defaultAddress, setDefaultAddress,
+          selectedAddress, setSelectedAddress,
+          useNewAddress, setUseNewAddress,
+          showAddressForm, setShowAddressForm
         }}
       >
         {children}

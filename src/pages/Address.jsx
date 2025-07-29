@@ -18,9 +18,10 @@ const Address = () => {
     handleSaveAddress,
     defaultAddress,
     setDefaultAddress,
+    showAddressForm, setShowAddressForm
   } = useProduct();
 
-  const [showAddressForm, setShowAddressForm] = useState(false);
+
 
   useEffect(() => {
     const fetchAddressData = async () => {

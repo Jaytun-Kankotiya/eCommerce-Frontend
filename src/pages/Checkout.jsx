@@ -27,79 +27,48 @@ const Checkout = () => {
     setDefaultAddress,
     addressList,
     setAddressList,
+    selectedAddress,
+    setSelectedAddress,
+    useNewAddress,
+    setUseNewAddress,
+    showAddressForm,
+    setShowAddressForm,
   } = useProduct();
 
-  const [useNewAddress, setUseNewAddress] = useState(false);
-  const [addressShow, setAddressShow] = useState(null)
-
-  // useEffect(() => {
-  //   if(!defaultAddress && addressList.length > 0){
-  //     const defaultAdr = addressList.find((addr) => addr.defaultAddress)
-  //     if(defaultAdr){
-  //       setDefaultAddress(defaultAdr._id)
-  //     }
-  //   }
-  // }, [addressList])
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token")
-  //   const initializeDefaultAddress = async () => {
-  //     if(addressList.length === 0) return
-
-  //     const defaultAdr = addressList.find((addr) => addr.defaultAddress)
-  //     if(!defaultAdr) return
-      
-  //     setDefaultAddress(defaultAdr._id)
-
-  //     try {
-  //       const response = await fetch(`http://localhost:3000/address/${defaultAdr._id}`, {
-  //       headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     })
-  //     const result = await response.json()
-  //     if(result.data){
-  //       setAddressData(result.data)
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch default address", error);
-  //   }
-  //   }
-  //   initializeDefaultAddress()
-  // }, [addressList])
+  const [addressShow, setAddressShow] = useState(null);
 
   const paymentMethods = [
     "Credit or Debit Card",
     "PayPal",
     "Apple Pay",
     "Cryptocurrencies",
-  ]; 
+  ];
 
   useEffect(() => {
     const fetchDefaultAddress = async () => {
-      const token = localStorage.getItem("token")
-    try {
+      const token = localStorage.getItem("token");
+      try {
         const refreshed = await fetch("http://localhost:3000/address/default", {
-        headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      })
-      const result = await refreshed.json()
-      
-      if(result.data){
-        console.log("Result:", result.data)
-        setAddressShow(result.data)
-        setDefaultAddress(result.data._id)
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const result = await refreshed.json();
+
+        if (result.data) {
+          console.log("Result:", result.data);
+          setAddressShow(result.data);
+          setDefaultAddress(result.data._id);
+        }
+      } catch (error) {
+        console.error("Failed to fetch default address", error);
       }
-    } catch (error) {
-      console.error("Failed to fetch default address", error);
-    }
-    }
-    fetchDefaultAddress()
+    };
+    fetchDefaultAddress();
     window.scrollTo(0, 0);
   }, []);
 
-  const showDefaultAddress =  addressShow;
+  const showDefaultAddress = addressShow;
 
   console.log(showDefaultAddress);
 
@@ -113,106 +82,97 @@ const Checkout = () => {
               <>
                 <h2 className="mt-5 py-3 text-center">Checkout</h2>
                 <div className="row">
-                  <div className="col-md-6 ms-1 mx-4">
-                    <div className="row">
-                      {
-                        !useNewAddress && showDefaultAddress && (
-                          <div
-                            className={`card border-primary border-3 shadow-sm p-3 mb-4 mx-4`}
-                            style={{ cursor: "pointer" }}
-                            onClick={() =>
-                              toast.info(
-                                "This address will be used for delivery"
-                              )
-                            }
-                          >
-                            <div className="card-body">
-                              <div className="d-flex align-items-center justify-content-between ">
-                              <div className="col-md-6">
-                                <h5 className="card-title mb-3">
-                                  {showDefaultAddress.firstName}{" "}
-                                  {showDefaultAddress.lastName}
-                                </h5>
-                                <p className="mb-1">
-                                  <strong>Email:</strong>{" "}
-                                  {showDefaultAddress.email}
-                                </p>
-                                <p className="mb-1">
-                                  <strong>Phone Number:</strong>{" "}
-                                  {showDefaultAddress.phoneNumber}
-                                </p>
-                                <p className="mb-1">
-                                  <strong>Address:</strong>{" "}
-                                  {showDefaultAddress.addressLine1}{" "}
-                                  {showDefaultAddress.addressLine2},{" "}
-                                  {showDefaultAddress.postalcode}
-                                </p>
-                                <p className="mb-1">
-                                  <strong>City:</strong>{" "}
-                                  {showDefaultAddress.city}
-                                </p>
-                                <p className="mb-1">
-                                  <strong>Province:</strong>{" "}
-                                  {showDefaultAddress.province}
-                                </p>
-                                <p className="mb-1">
-                                  <strong>Country:</strong>{" "}
-                                  {showDefaultAddress.country}
-                                </p>
-                              </div>
-
-                              <div className="col-md-6">
-                                <div className="d-flex flex-column gap-3">
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setUseNewAddress(true);
-                                    }}
-                                    className="btn btn-warning"
-                                  >
-                                    Use a different address
-                                  </button>
-                                  <Link
-                                    to={"/address"}
-                                    onClick={() => removeAddress(item)}
-                                    className="btn btn-info"
-                                  >
-                                    Change Address
-                                  </Link>
-                                </div>
-                              </div>
-                              
-                                
-                              </div>
-                            </div>
-                          </div>
-                        )
-                        //  : (
-                        //   <div className="mx-4">
-                        //     <p>
-                        //       No default address found. Please select or add an
-                        //       address.
-                        //     </p>
-                        //   </div>
-                        // )
-                      }
+                  <div className="col-md-6 ms-5 mx-4">
+                    <h4 className="mb-3">Delivery Address</h4>
+                    <div className="d-flex gap-3 mb-2">
+                      <button
+                        onClick={() => {
+                          setUseNewAddress((prev) => {
+                            const updated = !prev;
+                            if (updated) setSelectedAddress(null);
+                            return updated;
+                          });
+                        }}
+                        className="btn btn-warning"
+                      >
+                        {useNewAddress
+                          ? "Cancel"
+                          : "Add a new delivery address"}
+                      </button>
+                      <Link to={"/address"} className="btn btn-info">
+                        Change address
+                      </Link>
                     </div>
+                    {showDefaultAddress && (
+                      <div
+                        className={`card mb-4 mt-4 shadow-sm border-2 ${
+                          selectedAddress?._id === showDefaultAddress._id
+                            ? "border-success"
+                            : "border-light"
+                        }`}
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          setSelectedAddress(showDefaultAddress);
+                          toast.info("This address will be used for delivery");
+                        }}
+                      >
+                        <div className="card-body ">
+                          <div className="ms-2">
+                            
+                            <h5 className="mb-2 ">
+                              {showDefaultAddress.firstName}{" "}
+                              {showDefaultAddress.lastName}
+                            </h5>
+                            <p className="mb-1">
+                              <strong>Email:</strong> {showDefaultAddress.email}
+                            </p>
+                            
+                            <p className="mb-1">
+                              <strong>Phone:</strong>{" "}
+                              {showDefaultAddress.phoneNumber}
+                            </p>
+                            <p className="mb-1">
+                              <strong>Address:</strong>{" "}
+                              {showDefaultAddress.addressLine1},{" "}
+                              {showDefaultAddress.addressLine2}{" "} {showDefaultAddress.addressLine2 ? "," : ''}
+                              {showDefaultAddress.postalcode}
+                            </p>
+                            <p className="mb-1">
+                              <strong>City:</strong> {showDefaultAddress.city}
+                            </p>
+                            <p className="mb-1">
+                              <strong>Province:</strong>{" "}
+                              {showDefaultAddress.province}
+                            </p>
+                            <p className="mb-1">
+                              <strong>Country:</strong>{" "}
+                              {showDefaultAddress.country}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     {useNewAddress && addressFormData()}
-                    <div className="d-flex gap-3 mx-4">
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={addressData.saveAddress || false}
-                        onChange={handleCheckboxChange}
-                        style={{ height: "20px", width: "20px" }}
-                      />
-                      <label className="form-check-label" id="saveAddress">
-                        Save this address to my profile
-                      </label>
-                    </div>
-                    <br />
-                    <hr />
+
+                    {useNewAddress && (
+                      <>
+                        <div className="d-flex gap-3 mx-4">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={addressData.saveAddress || false}
+                            onChange={handleCheckboxChange}
+                            style={{ height: "20px", width: "20px" }}
+                          />
+                          <label className="form-check-label" id="saveAddress">
+                            Save this address to my profile
+                          </label>
+                        </div>
+                        <br />
+                      </>
+                    )}
+                    <hr className="mt-2" />
 
                     <div className="mx-4">
                       <p className="fs-3">Payment</p>
@@ -309,7 +269,7 @@ const Checkout = () => {
                       <hr />
                       <div className="d-flex justify-content-between">
                         <h5>TOTAL AMOUNT</h5>
-                        <h5>₹{totalOrderValue}</h5>
+                        <h5>₹{totalOrderValue.toFixed(2)}</h5>
                       </div>
                       <hr />
                       <p className="text-center">
