@@ -34,7 +34,7 @@ const ProductListing = () => {
 
   const productCategory = async () => {
     try {
-      const response = await fetch(`https://e-commerce-backend-umber-nu.vercel.app/productListing`)
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/productListing`)
       // console.log(response)
       if(response.ok){
         const data = await response.json()

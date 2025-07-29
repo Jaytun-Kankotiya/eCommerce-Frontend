@@ -48,7 +48,7 @@ const Checkout = () => {
     const fetchDefaultAddress = async () => {
       const token = localStorage.getItem("token");
       try {
-        const refreshed = await fetch("https://e-commerce-backend-umber-nu.vercel.app/address/default", {
+        const refreshed = await fetch(`${import.meta.env.VITE_SERVER_URL}/address/default`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -56,7 +56,7 @@ const Checkout = () => {
         const result = await refreshed.json();
 
         if (result.data) {
-          console.log("Result:", result.data);
+          // console.log("Result:", result.data);
           setAddressShow(result.data);
           setDefaultAddress(result.data._id);
         }
@@ -69,8 +69,6 @@ const Checkout = () => {
   }, []);
 
   const showDefaultAddress = addressShow;
-
-  console.log(showDefaultAddress);
 
   return (
     <>

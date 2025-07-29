@@ -85,10 +85,10 @@ const ProductProvider = ({ children }) => {
         });
         try {
           const [cartRes, wishlistRes] = await Promise.all([
-            fetch("https://e-commerce-backend-umber-nu.vercel.app/cartItems", {
+            fetch(`${import.meta.env.VITE_SERVER_URL}/cartItems`, {
               headers: { Authorization: `Bearer ${token}` },
             }),
-            fetch("https://e-commerce-backend-umber-nu.vercel.app/wishlist", {
+            fetch(`${import.meta.env.VITE_SERVER_URL}/wishlist`, {
               headers: { Authorization: `Bearer ${token}` },
             }),
           ]);
@@ -146,7 +146,7 @@ const ProductProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("https://e-commerce-backend-umber-nu.vercel.app/userProfile", {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/userProfile`, {
           method: "GET",
           headers: {
             Authorization: userToken,
@@ -182,7 +182,7 @@ const ProductProvider = ({ children }) => {
     const isAlreadyInCart = cartItems.includes(product.id);
     try {
       if (isAlreadyInCart) {
-        await fetch(`https://e-commerce-backend-umber-nu.vercel.app/cartItems/${product.id}`, {
+        await fetch(`${import.meta.env.VITE_SERVER_URL}/cartItems/${product.id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -191,7 +191,7 @@ const ProductProvider = ({ children }) => {
         setCartItems((prev) => prev.filter((id) => id !== product.id));
         toast.info("Item removed from cart");
       } else {
-        const res = await fetch("https://e-commerce-backend-umber-nu.vercel.app/cartItems", {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/cartItems`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -232,7 +232,7 @@ const ProductProvider = ({ children }) => {
     try {
       if (isWishlisted) {
         const res = await fetch(
-          `https://e-commerce-backend-umber-nu.vercel.app/wishlist/${product.id}`,
+          `${import.meta.env.VITE_SERVER_URL}/wishlist/${product.id}`,
           {
             method: "DELETE",
             headers: {
@@ -244,7 +244,7 @@ const ProductProvider = ({ children }) => {
         setWishlist((prev) => prev.filter((id) => id !== product.id));
         toast.info("Item removed from wishlist");
       } else {
-        const res = await fetch("https://e-commerce-backend-umber-nu.vercel.app/wishlist", {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/wishlist`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -332,7 +332,7 @@ const ProductProvider = ({ children }) => {
       const token = localStorage.getItem("token");
       const isUpdate = !!address._id;
       const response = await fetch(
-        `https://e-commerce-backend-umber-nu.vercel.app/address${isUpdate ? `/${address._id}` : ""}`,
+        `${import.meta.env.VITE_SERVER_URL}/address${isUpdate ? `/${address._id}` : ""}`,
         {
           method: isUpdate ? "PUT" : "POST",
           headers: {
@@ -441,8 +441,6 @@ const ProductProvider = ({ children }) => {
     descriptions: item.descriptions,
     quantity: quantity[item.id] ?? item.quantity ?? 1,
     size: size[item.id] || item.size || "N/A",
-    // size: size[item.id] || item.size || "N/A",
-    // quantity: quantity[item.id] ?? item.quantity ?? 1,
     }))
     if (!token) {
       toast.error("Please Login to place your order.");
@@ -469,7 +467,7 @@ const ProductProvider = ({ children }) => {
 
 
     try {
-      const response = await fetch("https://e-commerce-backend-umber-nu.vercel.app/orders", {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -695,7 +693,7 @@ const ProductProvider = ({ children }) => {
     );
   };
 
-  console.log("Selected Address:",selectedAddress)
+  // console.log("Selected Address:",selectedAddress)
 
   const placeOrderHandler = async () => {
     const isAddressValid = requireFields.every((field) =>
@@ -703,7 +701,6 @@ const ProductProvider = ({ children }) => {
     );
     if ((isAddressValid || selectedAddress ) && selectedMethod) {
       const orderResult = await orderPlaceHandler();
-      // console.log("OrderResult: ", orderResult);
       if (orderResult) {
         navigate("/orders");
         clearFormFields();

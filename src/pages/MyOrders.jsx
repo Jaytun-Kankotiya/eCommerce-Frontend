@@ -19,7 +19,7 @@ const MyOrders = () => {
     const fetchOrders = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch("https://e-commerce-backend-umber-nu.vercel.app/orders", {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

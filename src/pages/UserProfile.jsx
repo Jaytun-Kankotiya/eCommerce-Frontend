@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { useProduct } from "../contexts/ProductContext";
 import { toast } from "react-toastify";
-import { useRef } from "react";
+// import { useRef } from "react";
 import { jwtDecode } from "jwt-decode";
 
 const UserProfile = () => {
@@ -18,7 +18,9 @@ const UserProfile = () => {
     setFormData,
   } = useProduct();
   const [showPassword, setShowPassword] = useState(false);
-  const passwordRef = useRef();
+  // const passwordRef = useRef();
+
+  // console.log("API URL:", import.meta.env.VITE_SERVER_URL);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -64,9 +66,6 @@ const UserProfile = () => {
         });
       }
     }
-    // else {
-    //   logoutHandler()
-    // }
   }, []);
 
   const userDetails = async (e) => {
@@ -82,7 +81,7 @@ const UserProfile = () => {
     }
     try {
       const endpoint = formMode === "login" ? "verify" : "";
-      const url = `https://e-commerce-backend-umber-nu.vercel.app/userProfile/${endpoint}`;
+      const url = `${import.meta.env.VITE_SERVER_URL}/userProfile/${endpoint}`;
 
       const response = await fetch(url, {
         method: "POST",
@@ -105,11 +104,9 @@ const UserProfile = () => {
         localStorage.setItem("user", JSON.stringify(result.user));
         if (result.token) {
           localStorage.setItem("token", result.token);
-          // console.log("Token stored:", result.token);
         }
         toast.success(result.message);
         setIsLoggedIn(true);
-        // setFormData('login')
         setFormData({
           firstName: result.user.firstName || "",
           lastName: result.user.lastName || "",
@@ -125,7 +122,6 @@ const UserProfile = () => {
       resetFrom();
     }
   };
-  // console.log(formData)
 
   return (
     <>

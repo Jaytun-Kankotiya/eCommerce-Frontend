@@ -34,7 +34,7 @@ const Cart = () => {
     const fetchCart = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch("https://e-commerce-backend-umber-nu.vercel.app/cartItems", {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/cartItems`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -59,7 +59,7 @@ const Cart = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `https://e-commerce-backend-umber-nu.vercel.app/cartItems/${productId}`,
+        `${import.meta.env.VITE_SERVER_URL}/cartItems/${productId}`,
         {
           method: "DELETE",
           headers: {

@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/productListing': 'https://e-commerce-backend-umber-nu.vercel.app',
+      '/productListing': '${import.meta.env.VITE_SERVER_URL}',
     },
   },
 });

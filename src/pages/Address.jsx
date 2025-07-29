@@ -27,7 +27,7 @@ const Address = () => {
     const fetchAddressData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch("https://e-commerce-backend-umber-nu.vercel.app/address", {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/address`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -68,7 +68,7 @@ const Address = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `https://e-commerce-backend-umber-nu.vercel.app/address/${address._id}`,
+        `${import.meta.env.VITE_SERVER_URL}/address/${address._id}`,
         {
           method: "DELETE",
           headers: {
@@ -98,7 +98,7 @@ const Address = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await fetch(
-        `https://e-commerce-backend-umber-nu.vercel.app/address/${addressId}`,
+        `${import.meta.env.VITE_SERVER_URL}/address/${addressId}`,
         {
           method: "PATCH",
           headers: {
@@ -113,7 +113,7 @@ const Address = () => {
       if(!response.ok){
         throw new Error("Failed to update default address.")
       }
-      const refreshed = await fetch("https://e-commerce-backend-umber-nu.vercel.app/address", {
+      const refreshed = await fetch(`${import.meta.env.VITE_SERVER_URL}/address`, {
         headers: {
         Authorization: `Bearer ${token}`,
       },
