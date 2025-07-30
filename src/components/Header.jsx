@@ -19,7 +19,7 @@ const Header = () => {
   return (
     <>
       <nav className="navbar navbar-expand-lg py-2 fixed-top bg-white shadow-sm">
-        <div className="container">
+        <div className="container px-3">
           <NavLink className="navbar-brand text-secondary" to="/">
             myShoppingSite
           </NavLink>
@@ -38,17 +38,17 @@ const Header = () => {
 
           <div className="collapse navbar-collapse" id="navbarNav">
             <div className="d-flex flex-column flex-lg-row justify-content-between mt-2 w-100 mt-lg-0 align-items-center gap-3">
-              <form className="w-100 w-lg-50">
+              <form className="w-100 mx-auto" style={{ maxWidth: "500px" }}>
                 <input
                   type="text"
                   placeholder="Search for products"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="form-control me-2"
+                  className="form-control"
                   aria-label="Search"
                 />
               </form>
-              <div className="navbar-nav d-flex align-items-center gap-3 ms-lg-auto">
+              <div className="d-flex align-items-center gap-3">
                 {/* {isLoggedIn && } */}
                 {isLoggedIn ? (
                   <div className="dropdown">
@@ -109,33 +109,31 @@ const Header = () => {
                     </ul>
                   </div>
                 ) : (
-                  <NavLink
-                    className="nav-link btn btn-secondary text-light  py-1 px-3"
-                    to="/login"
-                  >
+                  <NavLink className="btn btn-secondary text-light" to="/login">
                     Sign Up
                   </NavLink>
                 )}
+
+                <NavLink className="nav-link position-relative " to="/wishlist">
+                  <i className="far fa-heart" style={{ fontSize: "22px" }} />
+                  {wishlist.length >= 0 && (
+                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                      {wishlist.length}
+                    </span>
+                  )}
+                </NavLink>
+                <NavLink className="nav-link position-relative" to="/cart">
+                  <i
+                    className="fas fa-shopping-cart"
+                    style={{ fontSize: "22px" }}
+                  />
+                  {wishlist.length >= 0 && (
+                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                      {cartItems.length}
+                    </span>
+                  )}
+                </NavLink>
               </div>
-              <NavLink className="nav-link position-relative" to="/wishlist">
-                <i className="far fa-heart" style={{ fontSize: "22px" }} />
-                {wishlist.length >= 0 && (
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {wishlist.length}
-                  </span>
-                )}
-              </NavLink>
-              <NavLink className="nav-link position-relative" to="/cart">
-                <i
-                  className="fas fa-shopping-cart"
-                  style={{ fontSize: "22px" }}
-                />
-                {wishlist.length >= 0 && (
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {cartItems.length}
-                  </span>
-                )}
-              </NavLink>
             </div>
           </div>
         </div>

@@ -73,11 +73,11 @@ const Checkout = () => {
     <>
       <Header />
       <div className="bg-light">
-        <div className="container py-3 mt-3 ">
+        <div className="container">
           <>
             {cartItems.length > 0 ? (
               <>
-                <h2 className="mt-5 py-3 text-center">Checkout</h2>
+                <h2 className=" py-3 text-center">Checkout</h2>
                 <div className="row">
                   <div className="col-md-6 ms-5 mx-4">
                     <h4 className="mb-3">Delivery Address</h4>

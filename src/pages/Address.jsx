@@ -129,7 +129,7 @@ const Address = () => {
   return (
     <>
       <Header />
-      <div className=" container mt-5 py-5">
+      <div className=" container py-2">
         <div className="d-flex align-items-center container justify-content-between">
           <p className="fs-3">
             {addressList.length > 0

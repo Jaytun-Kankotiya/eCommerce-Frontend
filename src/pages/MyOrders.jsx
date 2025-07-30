@@ -42,7 +42,7 @@ const MyOrders = () => {
   return (
     <>
       <Header />
-      <main className="mt-5 py-4">
+      <main className="py-2">
         <p className="fs-3 text-center py-2">My Orders</p>
         <div className="container">
           {orderedList.length ? (

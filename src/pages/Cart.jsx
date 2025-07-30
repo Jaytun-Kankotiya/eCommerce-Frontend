@@ -100,11 +100,11 @@ const Cart = () => {
     <>
       <Header />
       <div className="bg-light">
-        <div className="container mt-3">
+        <div className="container">
           <>
             {cartData.length > 0 ? (
               <>
-                <h3 className="mt-5 py-3 text-center">
+                <h3 className="py-3 text-center">
                   My Cart ({cartData.length})
                 </h3>
                 <div className="row gx-md-5 gy-4">
