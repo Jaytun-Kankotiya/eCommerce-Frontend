@@ -20,8 +20,8 @@ const Home = () => {
   return (
     <>
       <Header />
-      <div className="container mt-3">
-        <div className="row g-4 my-2">
+      <div className="container">
+        <div className="row g-4">
           <div className="col-md-3">
             <Link
               to={`/productListing/Men`}

@@ -100,99 +100,103 @@ const Cart = () => {
     <>
       <Header />
       <div className="bg-light">
-        <div className="container py-3 mt-3">
+        <div className="container mt-3">
           <>
             {cartData.length > 0 ? (
               <>
                 <h3 className="mt-5 py-3 text-center">
                   My Cart ({cartData.length})
                 </h3>
-                <div className="row">
-                  <div className="col-md-6 ms-1">
+                <div className="row gx-md-5 gy-4">
+                  <div className="col-lg-7">
                     {displayItems.slice().reverse().map((item) => (
-                      <div className="card mb-3" key={item.id}>
-                        <div className="row">
-                          <div className="col-md-6">
+                      <div className="card mb-4" key={item.id}>
+                        <div className="row g-0">
+                          <div className="col-md-5 col-12">
                             <Link to={`/productDetails/${item.id}`}>
+                            <div className="w-100 h-100 overflow-hidden rounded-start">
                               <img
                                 style={{
-                                  height: "332px",
-                                  width: "300px",
+                                  // height: "332px",
+                                  // width: "300px",
                                   objectFit: "cover",
+                                  maxHeight: "330px"
                                 }}
-                                className="card-img-left"
+                                className="img-fluid w-100 h-100"
                                 src={item.imageLink}
                                 alt={item.name}
                               />
+                              </div>
                             </Link>
                           </div>
 
-                          <div className="col-md-6" key={item.id}>
-                            <div className="card-body mt-1">
-                              <p>{item.name}</p>
+                          <div className="col-md-7 col-12" key={item.id}>
+                            <div className="card-body d-flex flex-column justify-content-between h-100">
+                              <div>
+                              <p className="fw-semibold">{item.name}</p>
                               <div className="d-flex align-items-center gap-2">
-                                <h4 className="fw-bolder">₹{item.price}</h4>
-                                <h4
-                                  className="text-secondary ms-2"
+                                <h5 className="fw-bold mb-0">₹{item.price}</h5>
+                                <h6
+                                  className="text-muted mb-0 text-decoration-line-through"
                                   style={{ textDecoration: "line-through" }}
                                 >
                                   ₹{item.price * 2}
-                                </h4>
-                                <h5 className="text-secondary">50% off</h5>
+                                </h6>
+                                <span className="text-success small">50% off</span>
                               </div>
 
-                              <div className="d-flex align-items-center py-2">
+                              <div className="d-flex align-items-center mt-3">
                                 <h6 className="mb-0">Quantity: </h6>
-                                <div className="d-flex align-items-center">
+                                <div className="d-flex align-items-center ms-3">
                                   <button
                                     onClick={() => decreaseQuantity(item.id)}
-                                    className="btn btn-outline-danger rounded-circle ms-3 d-flex justify-content-center align-items-center"
+                                    className="btn btn-outline-danger btn-sm rounded-circle d-flex justify-content-center align-items-center"
                                     style={{
                                       width: "30px",
                                       height: "30px",
                                     }}
                                   >
                                     <i
-                                      className="bi bi-dash"
+                                      className="bi bi-dash fs-5"
                                       style={{ fontSize: "22px" }}
                                     ></i>
                                   </button>
                                   <span
-                                    className="mb-0 ms-2"
-                                    style={{
-                                      minWidth: "26px",
-                                      textAlign: "center",
-                                      fontSize: "14px",
-                                      fontWeight: 500,
-                                    }}
+                                    className="mx-2 fw-semibold"
+                                    // style={{
+                                    //   minWidth: "26px",
+                                    //   textAlign: "center",
+                                    //   fontSize: "14px",
+                                    //   fontWeight: 500,
+                                    // }}
                                   >
                                     {quantity[item.id] || 1}
                                   </span>
                                   <button
                                     onClick={() => increaseQuantity(item.id)}
-                                    className="btn btn-outline-success rounded-circle ms-2 d-flex justify-content-center align-items-center"
+                                    className="btn btn-outline-success btn-sm rounded-circle d-flex justify-content-center align-items-center"
                                     style={{
                                       width: "30px",
                                       height: "30px",
                                     }}
                                   >
                                     <i
-                                      className="bi bi-plus"
-                                      style={{ fontSize: "22px" }}
+                                      className="bi bi-plus fs-5"
+                                      // style={{ fontSize: "22px" }}
                                     ></i>
                                   </button>
                                 </div>
                               </div>
 
-                              <div className="d-flex align-items-center py-2 gap-1">
-                                <h6 className="me-1 mb-0">Size: </h6>
+                              <div className="d-flex align-items-center gap-2 mt-3">
+                                <h6 className="mb-0">Size: </h6>
                                 {size[item.id] ? (
                                   <span
                                     className="badge bg-primary text-white"
-                                    style={{
-                                      minWidth: "50px",
-                                      textAlign: "center",
-                                    }}
+                                    // style={{
+                                    //   minWidth: "50px",
+                                    //   textAlign: "center",
+                                    // }}
                                   >
                                     {size[item.id]}
                                   </span>
@@ -205,7 +209,7 @@ const Cart = () => {
                                     name="size"
                                     id="size"
                                     className="form-select form-select-sm "
-                                    style={{ minWidth: "50px" }}
+                                    style={{ minWidth: "100px" }}
                                   >
                                     <option value="" defaultValue>
                                       Select Size
@@ -219,7 +223,7 @@ const Cart = () => {
                                 )}
                               </div>
 
-                              <h6 className="mt-2">
+                              <h6 className="mt-3">
                                 Total value: ₹
                                 {item.price * (quantity[item.id] || 1)}
                               </h6>
@@ -228,7 +232,7 @@ const Cart = () => {
                                 <button
                                   type="button"
                                   onClick={() => removeFromCart(item.id)}
-                                  className="btn btn-secondary"
+                                  className="btn btn-secondary btn-sm"
                                 >
                                   Remove From Cart
                                 </button>
@@ -237,13 +241,14 @@ const Cart = () => {
                                   onClick={() => {
                                     wishListAddHandler(item);
                                   }}
-                                  className="btn btn-outline-secondary"
+                                  className="btn btn-outline-secondary btn-sm"
                                 >
                                   {wishlist.includes(item.id)
                                     ? "Remove From Wishlist"
                                     : "Add to Wishlist"}
                                 </button>
                               </div>
+                            </div>
                             </div>
                           </div>
                         </div>
@@ -252,15 +257,10 @@ const Cart = () => {
                   </div>
 
                   <div
-                    className="col-md-4 ms-5 bg-white shadow-sm rounded py-4"
-                    style={{
-                      position: "sticky",
-                      top: "100px",
-                      alignSelf: "start",
-                    }}
+                    className="col-lg-5"
                   >
-                    <div className="px-2">
-                      <h4>PRICE DETAILS</h4>
+                    <div className="bg-white shadow-sm rounded p-4 sticky-top" style={{top: '100px'}}>
+                      <h5>PRICE DETAILS</h5>
                       <hr />
                       <div className="d-flex justify-content-between">
                         <p>
@@ -278,7 +278,7 @@ const Cart = () => {
                         <p>{delivery}</p>
                       </div>
                       <hr />
-                      <div className="d-flex justify-content-between">
+                      <div className="d-flex justify-content-between fw-bold">
                         <h5>TOTAL AMOUNT</h5>
                         <h5>
                           ₹
@@ -287,7 +287,7 @@ const Cart = () => {
                         </h5>
                       </div>
                       <hr />
-                      <p className="text-center">
+                      <p className="text-center text-success">
                         You will save ₹{discount} on this order
                       </p>
                       <button

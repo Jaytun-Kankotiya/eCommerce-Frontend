@@ -81,7 +81,7 @@ if(!product) return <p className='container py-3'>Product Not Found.</p>
     <div className="bg-light">
       <Header />
       <div className="">
-        <div className="container bg-white mt-5 pt-4">
+        <div className="container bg-white">
           {product && (
             <>
               <div className="row g-4">

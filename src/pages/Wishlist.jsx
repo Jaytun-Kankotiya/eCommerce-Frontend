@@ -72,8 +72,8 @@ const Wishlist = () => {
       <div>
         {wishListItems.length > 0 ? (
           <div className='container'>
-            <h3 className="text-center my-4">My Wishlist</h3>
-            <div className="row px-4">
+            <h3 className="text-center mt-3">My Wishlist ({filteredItemBySearch.length})</h3>
+            <div className="row px-4 mt-4">
               {filteredItemBySearch.map((product) => (
                 <div key={product.id} className="col-md-3">
                   <div className="card mb-3">

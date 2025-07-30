@@ -95,8 +95,8 @@ const ProductListing = () => {
   return (
     <>
       <Header />
-      <div className="d-flex row mt-5 mx-2">
-        <div className="col-md-2 mt-5">
+      <div className="d-flex row mx-2">
+        <div className="col-md-2">
           <div className="mx-1 position-sticky" style={{ top: '100px' }}>
             <div className="d-flex justify-content-between align-items-center">
               <h4 className="ms-0">Filters</h4>
@@ -111,10 +111,6 @@ const ProductListing = () => {
                 Clear
               </button>
             </div>
-            {/* <br />
-            <div>
-              <h4>Price</h4>
-            </div> */}
             <br />
             <div>
               <h4>Category</h4>
@@ -225,8 +221,8 @@ const ProductListing = () => {
           </div>
         </div>
 
-        <div className="col-md-10 bg-light rounded mt-3">
-          <div className="p-3 mx-3 mt-2">
+        <div className="col-md-10 bg-light rounded">
+          <div className="p-3 mt-2">
             <h3>
               Showing All Products{' '}
               <span>(showing {filteredCategory.length} products)</span>
@@ -238,7 +234,7 @@ const ProductListing = () => {
                   <div className="card mb-3 mt-2">
                     <Link to={`/productDetails/${product.id}`}>
                       <img
-                        className="card-img-top"
+                        className="card-img-top img-fluid"
                         src={product.imageLink}
                         alt={product.name}
                         style={{ objectFit: 'cover', height: '300px' }}

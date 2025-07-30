@@ -18,21 +18,12 @@ const Header = () => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg py-2 fixed-top bg-white ">
-        <div className="container d-flex justify-content-between align-items-center">
-          <NavLink className="navbar-brand text-secondary mt-1 me-5" to="/">
+      <nav className="navbar navbar-expand-lg py-2 fixed-top bg-white shadow-sm">
+        <div className="container">
+          <NavLink className="navbar-brand text-secondary" to="/">
             myShoppingSite
           </NavLink>
-          <form className="d-lg-block flex-grow-1 mt-1 mx-5 w-50">
-            <input
-              type="text"
-              placeholder="Search for products"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="form-control me-2"
-              aria-label="Search"
-            />
-          </form>
+
           <button
             className="navbar-toggler"
             type="button"
@@ -46,11 +37,21 @@ const Header = () => {
           </button>
 
           <div className="collapse navbar-collapse" id="navbarNav">
-            <div className="navbar-nav d-flex align-items-center ms-auto gap-3">
-              <div className="d-flex align-items-center">
+            <div className="d-flex flex-column flex-lg-row justify-content-between mt-2 w-100 mt-lg-0 align-items-center gap-3">
+              <form className="w-100 w-lg-50">
+                <input
+                  type="text"
+                  placeholder="Search for products"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="form-control me-2"
+                  aria-label="Search"
+                />
+              </form>
+              <div className="navbar-nav d-flex align-items-center gap-3 ms-lg-auto">
                 {/* {isLoggedIn && } */}
                 {isLoggedIn ? (
-                  <div className="dropdown profile-dropdown">
+                  <div className="dropdown">
                     <img
                       style={{
                         width: "36px",
@@ -76,7 +77,7 @@ const Header = () => {
                       style={{
                         minWidth: "180px",
                         borderRadius: "10px",
-                        fontSize: "0.95rem",
+                        // fontSize: "0.95rem",
                       }}
                     >
                       <li>
@@ -109,7 +110,7 @@ const Header = () => {
                   </div>
                 ) : (
                   <NavLink
-                    className="nav-link btn btn-secondary bg-secondary text-light  py-1 px-4"
+                    className="nav-link btn btn-secondary text-light  py-1 px-3"
                     to="/login"
                   >
                     Sign Up
@@ -119,7 +120,7 @@ const Header = () => {
               <NavLink className="nav-link position-relative" to="/wishlist">
                 <i className="far fa-heart" style={{ fontSize: "22px" }} />
                 {wishlist.length >= 0 && (
-                  <span className="position-absolute top-10 start-90 translate-middle badge rounded-pill bg-danger">
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     {wishlist.length}
                   </span>
                 )}
@@ -130,7 +131,7 @@ const Header = () => {
                   style={{ fontSize: "22px" }}
                 />
                 {wishlist.length >= 0 && (
-                  <span className="position-absolute top-10 start-90 translate-middle badge rounded-pill bg-danger">
+                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                     {cartItems.length}
                   </span>
                 )}
