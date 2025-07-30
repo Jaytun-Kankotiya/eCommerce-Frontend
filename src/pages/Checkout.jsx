@@ -78,10 +78,10 @@ const Checkout = () => {
             {cartItems.length > 0 ? (
               <>
                 <h2 className=" py-3 text-center">Checkout</h2>
-                <div className="row">
-                  <div className="col-md-6 ms-5 mx-4">
+                <div className="row g-4">
+                  <div className="col-12 col-lg-6">
                     <h4 className="mb-3">Delivery Address</h4>
-                    <div className="d-flex gap-3 mb-2">
+                    <div className="d-flex flex-column flex-md-row gap-3 mb-3">
                       <button
                         onClick={() => {
                           setUseNewAddress((prev) => {
@@ -102,7 +102,7 @@ const Checkout = () => {
                     </div>
                     {showDefaultAddress && (
                       <div
-                        className={`card mb-4 mt-4 shadow-sm border-2 ${
+                        className={`card mb-4 shadow-sm border-2 ${
                           selectedAddress?._id === showDefaultAddress._id
                             ? "border-success"
                             : "border-light"
@@ -154,7 +154,7 @@ const Checkout = () => {
 
                     {useNewAddress && (
                       <>
-                        <div className="d-flex gap-3 mx-4">
+                        <div className="form-check mb-3 mx-4">
                           <input
                             className="form-check-input"
                             type="checkbox"
@@ -169,13 +169,13 @@ const Checkout = () => {
                         <br />
                       </>
                     )}
-                    <hr className="mt-2" />
+                    <hr className="my-4" />
 
                     <div className="mx-4">
                       <p className="fs-3">Payment</p>
 
                       <label className="fs-5 mt-3">Have a promo code?</label>
-                      <div className="d-flex align-items-center mt-2 gap-3">
+                      <div className="d-flex flex-column flex-sm-row gap-3 mt-2">
                         <input
                           type="text"
                           placeholder="Promo"
@@ -190,10 +190,10 @@ const Checkout = () => {
                       <br />
                     </div>
 
-                    <div className="mx-4 mb-4">
+                    <div className="mx-4">
                       <p className="fs-5 mb-3">How would you like to pay?</p>
 
-                      <div className="d-flex flex-column gap-3">
+                      <div className="d-flex flex-column gap-3 mb-3">
                         {paymentMethods.map((method, index) => (
                           <div key={index}>
                             <label
@@ -234,7 +234,7 @@ const Checkout = () => {
                   </div>
 
                   <div
-                    className="col-md-4 ms-5 bg-white shadow-sm rounded py-4 mt-4"
+                    className="col-12 col-lg-5 ms-5 bg-white shadow-sm rounded py-4 mt-4"
                     style={{
                       position: "sticky",
                       top: "100px",

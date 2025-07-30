@@ -127,12 +127,12 @@ const UserProfile = () => {
     <>
       <Header />
       <div
-        className="d-flex flex-column align-items-center justify-content-center mt-3 py-3"
+        className="d-flex flex-column align-items-center justify-content-center"
         style={{ minHeight: "100vh", background: "#f8f9fa" }}
       >
         {isLoggedIn ? (
           <div
-            className="card p-4 shadow-lg mt-5 mx-auto "
+            className="card p-4 shadow-lg mx-auto "
             style={{
               maxWidth: "450px",
               width: "100%",
@@ -177,7 +177,7 @@ const UserProfile = () => {
           </div>
         ) : (
           <div
-            className="card p-4 shadow-sm mt-3 w-100"
+            className="card p-4 shadow-sm w-100"
             style={{
               maxWidth: "500px",
               borderRadius: "1.25rem",
@@ -188,7 +188,7 @@ const UserProfile = () => {
               {formMode === "login" ? "Login" : "Sign Up"}
             </h3>
 
-            <form className="form  py-3" onSubmit={userDetails}>
+            <form className="form" onSubmit={userDetails}>
               {formMode === "signup" && (
                 <div>
                   <label htmlFor="firstName" className="form-label fw-semibold">

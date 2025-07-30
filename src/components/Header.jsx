@@ -114,7 +114,7 @@ const Header = () => {
                   </NavLink>
                 )}
 
-                <NavLink className="nav-link position-relative " to="/wishlist">
+                <NavLink className="nav-link position-relative me-2" to="/wishlist">
                   <i className="far fa-heart" style={{ fontSize: "22px" }} />
                   {wishlist.length >= 0 && (
                     <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
