@@ -42,6 +42,7 @@ const Wishlist = () => {
   fetchWishlist()
   }, [])
 
+
   const removeItems = async (productId) => {
     const token = localStorage.getItem("token");
     try {

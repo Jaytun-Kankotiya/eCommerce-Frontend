@@ -91,9 +91,6 @@ const Address = () => {
     setShowAddressForm(true);
   };
 
-
-  console.log(defaultAddress);
-
   const defaultAddressUpdate = async (addressId) => {
     const token = localStorage.getItem("token");
     try {
