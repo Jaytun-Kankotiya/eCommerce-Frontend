@@ -29,7 +29,6 @@ const MyOrders = () => {
         }
         const result = await response.json();
         setOrderedList(result.data);
-        // console.log(result.data);
         setAddressData(false);
       } catch (error) {
         console.log("Error fetching orders data.");

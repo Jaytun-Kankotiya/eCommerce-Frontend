@@ -117,10 +117,8 @@ const Cart = () => {
                             <div className="w-100 h-100 overflow-hidden rounded-start">
                               <img
                                 style={{
-                                  // height: "332px",
-                                  // width: "300px",
                                   objectFit: "cover",
-                                  maxHeight: "330px"
+                                  maxHeight: "325px"
                                 }}
                                 className="img-fluid w-100 h-100"
                                 src={item.imageLink}
@@ -133,7 +131,7 @@ const Cart = () => {
                           <div className="col-md-7 col-12" key={item.id}>
                             <div className="card-body d-flex flex-column justify-content-between h-100">
                               <div>
-                              <p className="fw-semibold">{item.name}</p>
+                              <p className="fw-semibold fs-5">{item.name}</p>
                               <div className="d-flex align-items-center gap-2">
                                 <h5 className="fw-bold mb-0">₹{item.price}</h5>
                                 <h6
@@ -163,12 +161,6 @@ const Cart = () => {
                                   </button>
                                   <span
                                     className="mx-2 fw-semibold"
-                                    // style={{
-                                    //   minWidth: "26px",
-                                    //   textAlign: "center",
-                                    //   fontSize: "14px",
-                                    //   fontWeight: 500,
-                                    // }}
                                   >
                                     {quantity[item.id] || 1}
                                   </span>
@@ -182,7 +174,6 @@ const Cart = () => {
                                   >
                                     <i
                                       className="bi bi-plus fs-5"
-                                      // style={{ fontSize: "22px" }}
                                     ></i>
                                   </button>
                                 </div>
@@ -193,10 +184,6 @@ const Cart = () => {
                                 {size[item.id] ? (
                                   <span
                                     className="badge bg-primary text-white"
-                                    // style={{
-                                    //   minWidth: "50px",
-                                    //   textAlign: "center",
-                                    // }}
                                   >
                                     {size[item.id]}
                                   </span>

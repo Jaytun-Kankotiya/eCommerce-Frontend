@@ -49,7 +49,6 @@ const Header = () => {
                 />
               </form>
               <div className="d-flex align-items-center gap-3">
-                {/* {isLoggedIn && } */}
                 {isLoggedIn ? (
                   <div className="dropdown">
                     <img
@@ -77,7 +76,6 @@ const Header = () => {
                       style={{
                         minWidth: "180px",
                         borderRadius: "10px",
-                        // fontSize: "0.95rem",
                       }}
                     >
                       <li>

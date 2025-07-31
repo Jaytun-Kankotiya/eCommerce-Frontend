@@ -123,6 +123,8 @@ const Address = () => {
     } catch (error) {}
   };
 
+  const anySelected = addressList.some((item) => item.defaultAddress === true)
+
   return (
     <>
       <Header />
@@ -133,6 +135,7 @@ const Address = () => {
               ? "Saved Address"
               : "No Saved addresses yet"}
           </p>
+          {!anySelected && <p className="fs-5">Please select an address card to use as your default address.</p>}
           <button
             onClick={() => setShowAddressForm((prev) => !prev)}
             className="btn btn-primary"

@@ -27,8 +27,6 @@ const ProductDetails = () => {
     search
   } = useProduct();
 
-  const [similarProducts, setSimilarProducts] = useState([])
-
   useEffect(() => {
     const fetchProduct = async () => {
       try {

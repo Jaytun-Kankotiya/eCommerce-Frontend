@@ -18,9 +18,6 @@ const UserProfile = () => {
     setFormData,
   } = useProduct();
   const [showPassword, setShowPassword] = useState(false);
-  // const passwordRef = useRef();
-
-  // console.log("API URL:", import.meta.env.VITE_SERVER_URL);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
