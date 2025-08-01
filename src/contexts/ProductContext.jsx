@@ -708,14 +708,9 @@ const ProductProvider = ({ children }) => {
       addressData[field]?.trim()
     );
 
-    if(!(isAddressValid || selectedAddress)){
-      toast.error("Please add Delivery address to proceed.")
+    if(!((isAddressValid || selectedAddress) && selectedMethod)){
+      toast.error("Please select both delivery address and payment method to proceed.")
     }
-
-    if(!selectedMethod){
-      toast.error("Please select a payment method to proceed.")
-    }
-
 
     if ((isAddressValid || selectedAddress) && selectedMethod) {
       const orderResult = await orderPlaceHandler();
