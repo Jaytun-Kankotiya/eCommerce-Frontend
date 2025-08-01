@@ -28,7 +28,7 @@ const ProductProvider = ({ children }) => {
   const [categoryProducts, setCategoryProducts] = useState([]);
   const [cartData, setCartData] = useState([]);
   const [defaultAddress, setDefaultAddress] = useState(null);
-  const [selectedAddress, setSelectedAddress] = useState(null)
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [useNewAddress, setUseNewAddress] = useState(false);
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -49,9 +49,8 @@ const ProductProvider = ({ children }) => {
     province: "",
     country: "",
     saveAddress: false,
-    default: false
+    default: false,
   });
-
 
   const clearFormFields = () => {
     setAddressData({
@@ -146,12 +145,15 @@ const ProductProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/userProfile`, {
-          method: "GET",
-          headers: {
-            Authorization: userToken,
-          },
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/userProfile`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: userToken,
+            },
+          }
+        );
         const result = await response.json();
         if (response.ok) {
           setWishlist(result.wishlist.map((item) => item.id));
@@ -182,31 +184,37 @@ const ProductProvider = ({ children }) => {
     const isAlreadyInCart = cartItems.includes(product.id);
     try {
       if (isAlreadyInCart) {
-        await fetch(`${import.meta.env.VITE_SERVER_URL}/cartItems/${product.id}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/cartItems/${product.id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setCartItems((prev) => prev.filter((id) => id !== product.id));
         toast.info("Item removed from cart");
       } else {
-        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/cartItems`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            imageLink: product.imageLink,
-            category: product.category,
-            rating: product.rating,
-            descriptions: product.descriptions,
-          }),
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}/cartItems`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              imageLink: product.imageLink,
+              category: product.category,
+              rating: product.rating,
+              descriptions: product.descriptions,
+            }),
+          }
+        );
 
         if (!res.ok) {
           const err = await res.json();
@@ -291,33 +299,33 @@ const ProductProvider = ({ children }) => {
     });
     navigate("/login");
   };
-  
-    useEffect(() => {
-      const token = localStorage.getItem("token");
 
-      if (token) {
-        try {
-          const decoded = jwtDecode(token);
-          const currentTime = Date.now() / 1000;
+  useEffect(() => {
+    const token = localStorage.getItem("token");
 
-          if (decoded.exp < currentTime) {
-            localStorage.removeItem("token");
-            navigate("/login");
-          } else {
-            const timeOut = (decoded.exp - currentTime) * 1000;
-            const timer = setTimeout(() => {
-              localStorage.removeItem("token");
-              navigate("/login")
-            }, timeOut);
-            return () => clearTimeout(timer);
-          }
-        } catch (error) {
-          console.error("Invalid token:", error);
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+
+        if (decoded.exp < currentTime) {
           localStorage.removeItem("token");
           navigate("/login");
+        } else {
+          const timeOut = (decoded.exp - currentTime) * 1000;
+          const timer = setTimeout(() => {
+            localStorage.removeItem("token");
+            navigate("/login");
+          }, timeOut);
+          return () => clearTimeout(timer);
         }
+      } catch (error) {
+        console.error("Invalid token:", error);
+        localStorage.removeItem("token");
+        navigate("/login");
       }
-    }, []);
+    }
+  }, []);
 
   const totalCartValue = cartData.reduce(
     (acc, item) => acc + item.price * (quantity[item.id] || 1),
@@ -327,13 +335,14 @@ const ProductProvider = ({ children }) => {
   const delivery = totalCartValue > 2999 ? "Free Delivery" : `₹${deliveryFee}`;
   const discount = totalCartValue;
 
-
   const addressFormHandler = async (address) => {
     try {
       const token = localStorage.getItem("token");
       const isUpdate = !!address._id;
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/address${isUpdate ? `/${address._id}` : ""}`,
+        `${import.meta.env.VITE_SERVER_URL}/address${
+          isUpdate ? `/${address._id}` : ""
+        }`,
         {
           method: isUpdate ? "PUT" : "POST",
           headers: {
@@ -351,7 +360,7 @@ const ProductProvider = ({ children }) => {
             city: address.city,
             province: address.province,
             country: address.country,
-            defaultAddress: address.defaultAddress || false
+            defaultAddress: address.defaultAddress || false,
           }),
         }
       );
@@ -431,54 +440,56 @@ const ProductProvider = ({ children }) => {
   const orderPlaceHandler = async () => {
     const token = localStorage.getItem("token");
     const updatedCartData = cartData.map((item) => ({
-    id: item.id,
-    name: item.name,
-    price: item.price,
-    imageLink: item.imageLink,
-    category: item.category,
-    rating: item.rating,
-    descriptions: item.descriptions,
-    quantity: quantity[item.id] ?? item.quantity ?? 1,
-    size: size[item.id] || item.size || "N/A",
-    }))
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      imageLink: item.imageLink,
+      category: item.category,
+      rating: item.rating,
+      descriptions: item.descriptions,
+      quantity: quantity[item.id] ?? item.quantity ?? 1,
+      size: size[item.id] || item.size || "N/A",
+    }));
     if (!token) {
       toast.error("Please Login to place your order.");
       return;
     }
-    const addressToUse = useNewAddress ? addressData : selectedAddress
-    if(!addressToUse || !addressToUse.firstName){
-      toast.error("Please select or enter an address.")
-      return
+    const addressToUse = useNewAddress ? addressData : selectedAddress;
+    if (!addressToUse || !addressToUse.firstName) {
+      toast.error("Please select or enter an address.");
+      return;
     }
 
     const cleanAddress = {
-    firstName: addressToUse.firstName,
-    lastName: addressToUse.lastName || "",
-    email: addressToUse.email,
-    phoneNumber: addressToUse.phoneNumber,
-    addressLine1: addressToUse.addressLine1,
-    addressLine2: addressToUse.addressLine2 || "",
-    postalcode: addressToUse.postalcode,
-    city: addressToUse.city,
-    province: addressToUse.province,
-    country: addressToUse.country,
-  };
-
+      firstName: addressToUse.firstName,
+      lastName: addressToUse.lastName || "",
+      email: addressToUse.email,
+      phoneNumber: addressToUse.phoneNumber,
+      addressLine1: addressToUse.addressLine1,
+      addressLine2: addressToUse.addressLine2 || "",
+      postalcode: addressToUse.postalcode,
+      city: addressToUse.city,
+      province: addressToUse.province,
+      country: addressToUse.country,
+    };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/orders`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          cartData: updatedCartData,
-          selectedMethod,
-          totalOrderValue,
-          ...cleanAddress,
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            cartData: updatedCartData,
+            selectedMethod,
+            totalOrderValue,
+            ...cleanAddress,
+          }),
+        }
+      );
       const result = await response.json();
       if (response.ok) {
         toast.success("Order Placed Successfully. Thank you for shopping.");
@@ -696,7 +707,17 @@ const ProductProvider = ({ children }) => {
     const isAddressValid = requireFields.every((field) =>
       addressData[field]?.trim()
     );
-    if ((isAddressValid || selectedAddress ) && selectedMethod) {
+
+    if(!(isAddressValid || selectedAddress)){
+      toast.error("Please add Delivery address to proceed.")
+    }
+
+    if(!selectedMethod){
+      toast.error("Please select a payment method to proceed.")
+    }
+
+
+    if ((isAddressValid || selectedAddress) && selectedMethod) {
       const orderResult = await orderPlaceHandler();
       if (orderResult) {
         navigate("/orders");
@@ -707,13 +728,14 @@ const ProductProvider = ({ children }) => {
         localStorage.removeItem("cart");
         console.log("Cart clear: ", cartData);
       }
-    } else {
-      toast.error(
-        isAddressValid
-          ? "Please select a payment method to proceed."
-          : "Please add Delivery address to proceed."
-      );
     }
+    //  else {
+    //   toast.error(
+    //     isAddressValid
+    //       ? "Please add Delivery address to proceed."
+    //       : "Please select a payment method to proceed."
+    //   );
+    // }
   };
 
   const totalOrderValue =
@@ -721,42 +743,44 @@ const ProductProvider = ({ children }) => {
     totalCartValue * 0.13 +
     (delivery === "Free Delivery" ? 0 : deliveryFee);
 
-
   const handleBuyNow = async (product) => {
-    if(!isLoggedIn){
-      toast.error("Please login to continue")
-      navigate('/login')
-      return
+    if (!isLoggedIn) {
+      toast.error("Please login to continue");
+      navigate("/login");
+      return;
     }
 
     try {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
 
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/cartItems`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(product)
-      })
-      const result = await response.json()
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/cartItems`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(product),
+        }
+      );
+      const result = await response.json();
 
-      if(response.ok){
-        toast.success('Added to cart')
+      if (response.ok) {
+        toast.success("Added to cart");
 
-      setCartData((prev) => {
-      const alreadyInCart = prev.some((item) => item._id === product._id)
-      return alreadyInCart ? prev : [product, ...prev]
-    })
-    navigate('/cart')
-    }else{
-      toast.error(response?.error || "Product is already in cart")
-    }
+        setCartData((prev) => {
+          const alreadyInCart = prev.some((item) => item._id === product._id);
+          return alreadyInCart ? prev : [product, ...prev];
+        });
+        navigate("/cart");
+      } else {
+        toast.error(response?.error || "Product is already in cart");
+      }
     } catch (error) {
-      toast.error("Something went wrong while adding to cart")
+      toast.error("Something went wrong while adding to cart");
     }
-}
+  };
 
   return (
     <>
@@ -817,10 +841,14 @@ const ProductProvider = ({ children }) => {
           setOrderedList,
           orderPlaceHandler,
           totalOrderValue,
-          defaultAddress, setDefaultAddress,
-          selectedAddress, setSelectedAddress,
-          useNewAddress, setUseNewAddress,
-          showAddressForm, setShowAddressForm
+          defaultAddress,
+          setDefaultAddress,
+          selectedAddress,
+          setSelectedAddress,
+          useNewAddress,
+          setUseNewAddress,
+          showAddressForm,
+          setShowAddressForm,
         }}
       >
         {children}
