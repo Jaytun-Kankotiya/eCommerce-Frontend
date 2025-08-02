@@ -118,7 +118,7 @@ const Cart = () => {
                               <img
                                 style={{
                                   objectFit: "cover",
-                                  maxHeight: "325px"
+                                  maxHeight: "325px",
                                 }}
                                 className="img-fluid w-100 h-100"
                                 src={item.imageLink}
@@ -244,7 +244,7 @@ const Cart = () => {
                   </div>
 
                   <div
-                    className="col-lg-5"
+                    className="col-lg-5 mb-4"
                   >
                     <div className="bg-white shadow-sm rounded p-4 sticky-top" style={{top: '100px'}}>
                       <h5>PRICE DETAILS</h5>

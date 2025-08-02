@@ -40,7 +40,6 @@ const Home = () => {
           <div className="col-md-3">
             <Link
               to={`/productListing/Women`}
-              // onClick={() => setCategory('Women')}
               className="nav-link"
             >
               <img
@@ -56,7 +55,6 @@ const Home = () => {
           <div className="col-md-3">
             <Link
               to={`/productListing/Kids`}
-              // onClick={() => setCategory('Kids')}
               className="nav-link"
             >
               <img
@@ -72,7 +70,6 @@ const Home = () => {
           <div className="col-md-3">
             <Link
               to={`/productListing/Accessories`}
-              // onClick={() => setCategory('Accessories')}
               className="nav-link"
             >
               <img

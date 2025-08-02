@@ -124,7 +124,7 @@ const UserProfile = () => {
     <>
       <Header />
       <div
-        className="d-flex flex-column align-items-center justify-content-center"
+        className="d-flex flex-column align-items-center justify-content-center profile-container"
         style={{ minHeight: "100vh", background: "#f8f9fa" }}
       >
         {isLoggedIn ? (
@@ -262,12 +262,6 @@ const UserProfile = () => {
                     {showPassword ? "Hide Password" : "Show Password"}
                   </label>
                 </div>
-
-                {/* <label htmlFor="email" className='form-label fw-semibold'>Enter your Email</label>
-              <input id="email" name='email' type="email" value={formData.email} placeholder="Enter your Email" onChange={handleChange} className=" mb-2 form-control rounded-pill px-3" /><br/>
-
-              <label htmlFor="password" className='form-label fw-semibold'>Enter your Password</label>
-              <input id="password" name='password' type="password" value={formData.password} placeholder="Enter your Password" onChange={handleChange} className=" mb-3 form-control rounded-pill px-3" /><br/> */}
               </div>
 
               <div className="d-flex justify-content-center">
@@ -280,7 +274,7 @@ const UserProfile = () => {
               </div>
 
               <div className="text-center mt-4 d-flex justify-content-center gap-2">
-                <p className="mb-0">
+                <p className="mb-0 mt-1">
                   {formMode === "login" ? "Not a member?" : "Already a member?"}
                 </p>
                 <button
@@ -295,7 +289,6 @@ const UserProfile = () => {
                 </button>
               </div>
             </form>
-            {/* </div> */}
           </div>
         )}
       </div>

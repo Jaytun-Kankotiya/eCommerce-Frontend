@@ -30,7 +30,7 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/productDetails/${productId}`)
+        const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/product_details/${productId}`)
         const data = await response.json()
         setProduct(data)
         setLoading(false)

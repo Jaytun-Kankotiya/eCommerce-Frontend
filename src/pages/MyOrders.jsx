@@ -30,6 +30,7 @@ const MyOrders = () => {
         const result = await response.json();
         setOrderedList(result.data);
         setAddressData(false);
+        setLoading(false)
       } catch (error) {
         console.log("Error fetching orders data.");
         setLoading(false);
@@ -38,13 +39,16 @@ const MyOrders = () => {
     fetchOrders();
   }, []);
 
+if(loading) return <h5 className='mt-5 container py-5 text-center'>Loading...</h5>
+if(!orderedList) return <p className='container py-3'>Product Not Found.</p>
+
   return (
     <>
       <Header />
       <main className="py-2">
         <p className="fs-3 text-center py-2">My Orders</p>
         <div className="container">
-          {orderedList.length ? (
+          {orderedList.length > 0 ? (
             orderedList.map((order) => (
               <div className="card mb-4 shadow-sm rounded-4 px-3 px-md-4" key={order._id}>
                 <div className="card-header bg-white border-0 d-flex gap-4 justify-content-between flex-wrap px-2 px-md-4 py-3">

@@ -556,7 +556,7 @@ const ProductProvider = ({ children }) => {
                   [e.target.name]: e.target.value,
                 })
               }
-              placeholder="Email "
+              placeholder="Enter email (e.g., name@example.com)"
               className="form-control"
               style={{ height: "50px" }}
             />
@@ -724,13 +724,6 @@ const ProductProvider = ({ children }) => {
         console.log("Cart clear: ", cartData);
       }
     }
-    //  else {
-    //   toast.error(
-    //     isAddressValid
-    //       ? "Please add Delivery address to proceed."
-    //       : "Please select a payment method to proceed."
-    //   );
-    // }
   };
 
   const totalOrderValue =
@@ -765,13 +758,13 @@ const ProductProvider = ({ children }) => {
         toast.success("Added to cart");
 
         setCartData((prev) => {
-          const alreadyInCart = prev.some((item) => item._id === product._id);
+          const alreadyInCart = prev.some((item) => item.id === product.id);
           return alreadyInCart ? prev : [product, ...prev];
         });
-        navigate("/cart");
       } else {
         toast.error(response?.error || "Product is already in cart");
       }
+      navigate('/cart')
     } catch (error) {
       toast.error("Something went wrong while adding to cart");
     }
